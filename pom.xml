@@ -28,12 +28,19 @@
   </licenses>
 
   <developers>
+    <developer>
+      <id>wamphiry</id>
+      <name>(w) Iker Hernaez</name>
+      <url>https://github.com/ihernaez</url>
+    </developer>
   </developers>
 
   <properties>
     <java.version>8</java.version>
     <java.module.name>dev.orne.i18n.spi.eu</java.module.name>
     <license.licenseName>lgpl_v3</license.licenseName>
+
+    <javax.validation.version>2.0.1.Final</javax.validation.version>
 
     <github.project.id>java-i18n-eu</github.project.id>
     <sonar.projectKey>orne-dev_java-i18n-eu</sonar.projectKey>
@@ -45,6 +52,18 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>${javax.validation.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>

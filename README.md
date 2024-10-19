@@ -19,9 +19,10 @@ Provides basque language support for Java [Locale-Sensitive Services SPI][java i
 The library provides the following features (unchecked features are planned and
 unimplemented):
 
-- [] LocaleServiceProvider
+- [X] LocaleServiceProvider
+- [X] LocaleNameProvider
 - [] CurrencyNameProvider
-- [] TimeZoneNameProvider
+- [X] TimeZoneNameProvider
 - [] CalendarDataProvider
 - [] BreakIteratorProvider
 - [] CollatorProvider
