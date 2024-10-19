@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -42,8 +43,13 @@ class SpanishTimeZoneNamesTest {
             esData = new Properties();
             esData.load(is);
         } catch (IOException e) {
-            throw new AssertionError("Error loading spanish timezones names", e);
+            throw new AssertionError("Error loading spanish time zone names", e);
         }
+    }
+
+    @Test
+    void testExtractData() {
+        assertDoesNotThrow(() -> TimeZoneDataExtractor.main());
     }
 
     /**

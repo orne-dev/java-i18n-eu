@@ -16,5 +16,6 @@
 
   <logger name="dev.orne.i18n.spi.eu" level="OFF" />
   <logger name="dev.orne.i18n.spi.eu.TimeZoneDataExtractor" level="OFF" />
+  <logger name="dev.orne.i18n.spi.eu.CurrencyDataExtractor" level="OFF" />
 
 </configuration>

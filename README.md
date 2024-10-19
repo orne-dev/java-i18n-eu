@@ -21,9 +21,9 @@ unimplemented):
 
 - [X] LocaleServiceProvider
 - [X] LocaleNameProvider
-- [ ] CurrencyNameProvider
-- [X] CalendarDataProvider
 - [ ] CalendarNameProvider
+- [X] CalendarDataProvider
+- [X] CurrencyNameProvider
 - [X] TimeZoneNameProvider
 - [X] BreakIteratorProvider
 - [X] CollatorProvider
