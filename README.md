@@ -1,4 +1,4 @@
-# Locale-Sensitive Services SPI Basque language extension
+# Locale-Sensitive Services SPI Basque (Euskera) language extension
 
 Provides basque language support for Java [Locale-Sensitive Services SPI][java i18n spi].
 
@@ -21,15 +21,16 @@ unimplemented):
 
 - [X] LocaleServiceProvider
 - [X] LocaleNameProvider
-- [] CurrencyNameProvider
+- [ ] CurrencyNameProvider
+- [X] CalendarDataProvider
+- [ ] CalendarNameProvider
 - [X] TimeZoneNameProvider
-- [] CalendarDataProvider
-- [] BreakIteratorProvider
-- [] CollatorProvider
-- [] DateFormatProvider
-- [] DateFormatSymbolsProvider
-- [] DecimalFormatSymbolsProvider
-- [] NumberFormatProvider
+- [X] BreakIteratorProvider
+- [X] CollatorProvider
+- [X] DateFormatProvider
+- [X] DateFormatSymbolsProvider
+- [X] DecimalFormatSymbolsProvider
+- [X] NumberFormatProvider
 
 ## Usage
 

@@ -15,10 +15,10 @@ public final class Basque {
     public static final String LANGUAGE = "eu";
     /** The basque language locale. */
     public static final Locale LOCALE = new Locale(LANGUAGE);
-    /** The basque language locale. */
-    public static final Locale LOCALE_ES = new Locale(LANGUAGE, "es");
-    /** The basque language locale. */
-    public static final Locale LOCALE_FR = new Locale(LANGUAGE, "fr");
+    /** The southern basque country locale. */
+    public static final Locale LOCALE_ES = new Locale(LANGUAGE, "ES");
+    /** The northern basque country locale. */
+    public static final Locale LOCALE_FR = new Locale(LANGUAGE, "FR");
 
     /**
      * Private constructor.
