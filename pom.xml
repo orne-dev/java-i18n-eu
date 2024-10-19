@@ -37,6 +37,7 @@
 
   <properties>
     <java.version>8</java.version>
+    <java.jdk.version>17</java.jdk.version>
     <java.module.name>dev.orne.i18n.spi.eu</java.module.name>
     <license.licenseName>lgpl_v3</license.licenseName>
 
