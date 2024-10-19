@@ -24,10 +24,10 @@
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <!--
       <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-      -->
+      <!--
       <pattern>%msg%n</pattern>
+      -->
     </encoder>
   </appender>
 
@@ -37,6 +37,7 @@
 
   <logger name="dev.orne.i18n.spi.eu" level="OFF" />
   <logger name="dev.orne.i18n.spi.eu.BasqueTimeZoneNameProviderTest" level="OFF" />
+  <logger name="dev.orne.i18n.spi.eu.EnglishCurrencyNamesTest" level="OFF" />
   <logger name="dev.orne.i18n.spi.eu.BasqueCurrencyNameProviderTest" level="OFF" />
 
 </configuration>

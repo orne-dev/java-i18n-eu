@@ -30,17 +30,20 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.stream.Stream;
 
 import javax.validation.constraints.NotNull;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Unit tests for {@code BasqueCurrencyNameProvider}.
@@ -53,6 +56,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 @Tag("ut")
 class EnglishCurrencyNamesTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EnglishCurrencyNamesTest.class);
+
     private static final Properties esData;
     static {
         try (final InputStream is = EnglishCurrencyNamesTest.class.getResourceAsStream("currencies_en.properties")) {
@@ -63,9 +68,27 @@ class EnglishCurrencyNamesTest {
         }
     }
 
-    @Test
-    void testExtractData() {
-        assertDoesNotThrow(() -> CurrencyDataExtractor.main());
+    @BeforeAll
+    static void extractEnglishNames() {
+        ArrayList<Currency> currencies = new ArrayList<>(Currency.getAvailableCurrencies());
+        Collections.sort(currencies, (c1, c2) -> c1.getCurrencyCode().compareTo(c2.getCurrencyCode()));
+        HashMap<String, String> names = new HashMap<>();
+        HashMap<String, String> symbols = new HashMap<>();
+        for (Currency currency : currencies) {
+            final String code = currency.getCurrencyCode();
+            final String symbol = currency.getSymbol(Locale.ENGLISH);
+            final String name = currency.getDisplayName(Locale.ENGLISH);
+            LOG.debug("{} : {} ({})", code, symbol, name);
+            names.put(code, name);
+            symbols.put(code, symbol);
+        }
+        ArrayList<String> ids = new ArrayList<>(names.keySet());
+        Collections.sort(ids);
+        LOG.info("### Currencies data ###");
+        for (String id : ids) {
+            LOG.info("{}={}", id, names.get(id));
+            LOG.info("{}.symbol={}", id, symbols.get(id));
+        }
     }
 
     /**
