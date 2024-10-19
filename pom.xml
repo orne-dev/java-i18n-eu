@@ -16,7 +16,7 @@
 
   <name>basque-locale-extension</name>
   <description>Locale-Sensitive Services SPI Basque (Euskera) language extension</description>
-  <inceptionYear>2021</inceptionYear>
+  <inceptionYear>2024</inceptionYear>
   <url>${github.page.url}</url>
 
   <licenses>
