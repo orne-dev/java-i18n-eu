@@ -85,11 +85,10 @@ extends TimeZoneNameProvider {
         if (Basque.LANGUAGE.equals(locale.getLanguage())
                 && style == TimeZone.LONG) {
             final String cacheKey = id + (daylight ? "-DST" : "");
-            return this.names.computeIfAbsent(cacheKey, k -> {
-                return Optional.ofNullable(getTranslations().getProperty(
-                        getTranslationProperty(id, daylight)));
-                
-            }).orElse(null);
+            return this.names.computeIfAbsent(cacheKey, k -> Optional
+                    .ofNullable(getTranslations().getProperty(
+                        getTranslationProperty(id, daylight))))
+                    .orElse(null);
         }
         return null;
     }
