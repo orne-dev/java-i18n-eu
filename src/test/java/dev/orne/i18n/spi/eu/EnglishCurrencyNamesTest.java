@@ -55,7 +55,7 @@ class EnglishCurrencyNamesTest {
 
     private static final Properties esData;
     static {
-        try (final InputStream is = SpanishTimeZoneNamesTest.class.getResourceAsStream("currencies_en.properties")) {
+        try (final InputStream is = EnglishCurrencyNamesTest.class.getResourceAsStream("currencies_en.properties")) {
             esData = new Properties();
             esData.load(is);
         } catch (IOException e) {
@@ -81,7 +81,7 @@ class EnglishCurrencyNamesTest {
         String result = provider.getSymbol(currency.getCurrencyCode(), Basque.LOCALE);
         assertEquals(
                 expected,
-                result == null ? expected : result,
+                result,
                 () -> String.format("Unexpected symbol for currency '%s'", currency.getCurrencyCode()));
     }
 
@@ -98,7 +98,7 @@ class EnglishCurrencyNamesTest {
         String result = provider.getDisplayName(currency.getCurrencyCode(), Basque.LOCALE);
         assertEquals(
                 expected,
-                result == null ? expected : result,
+                result,
                 () -> String.format("Unexpected name for currency '%s'", currency.getCurrencyCode()));
     }
 

@@ -30,17 +30,22 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.validation.constraints.NotNull;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Unit tests for {@code BasqueTimeZoneNameProvider}.
@@ -53,12 +58,45 @@ import org.junit.jupiter.params.provider.MethodSource;
 @Tag("ut")
 class BasqueTimeZoneNameProviderTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BasqueTimeZoneNameProviderTest.class);
+
     private static final DateTimeFormatter TO_LONG = DateTimeFormatter.ofPattern(
             "zzzz",
-            new Locale("es"));
+            Locale.ENGLISH);
 
     /** The provider instance to test. */
     private final BasqueTimeZoneNameProvider provider = new BasqueTimeZoneNameProvider();
+
+    @BeforeAll
+    static void extractEnglishNames() {
+        final DateTimeFormatter toShort = DateTimeFormatter.ofPattern(
+                "z",
+                Locale.ENGLISH);
+        final DateTimeFormatter toLong = DateTimeFormatter.ofPattern(
+                "zzzz",
+                Locale.ENGLISH);
+        ArrayList<String> zoneIds = new ArrayList<>(ZoneId.getAvailableZoneIds());
+        Collections.sort(zoneIds);
+        HashSet<String> names = new HashSet<>();
+        for (String zoneId : zoneIds) {
+            final ZonedDateTime time = BasqueTimeZoneNameProvider.getReferenceTime(zoneId, false);
+            final ZonedDateTime dstTime = BasqueTimeZoneNameProvider.getReferenceTime(zoneId, true);
+            final String shortId = time.format(toShort);
+            final String dstShortId = dstTime.format(toShort);
+            final String name = time.format(toLong);
+            final String dstName = dstTime.format(toLong);
+            LOG.debug("{} NO DST: {} ({})", zoneId, shortId, name);
+            LOG.debug("{}    DST: {} ({})", zoneId, dstShortId, dstName);
+            names.add(name);
+            names.add(dstName);
+        }
+        ArrayList<String> result = new ArrayList<>(names);
+        Collections.sort(result);
+        LOG.info("### English ZoneIds data ###");
+        for (String name : result) {
+            LOG.info("{}={}", name, name);
+        }
+    }
 
     /**
      * Test for {@link BasqueTimeZoneNameProvider#getAvailableLocales()}.
@@ -79,6 +117,16 @@ class BasqueTimeZoneNameProviderTest {
     }
 
     /**
+     * Test for basque translation availability.
+     */
+    @ParameterizedTest
+    @MethodSource("englishTimeZoneNames")
+    void testTimeZoneNameTranslated(
+            final @NotNull String zoneName) {
+        assertNotNull(provider.getTranslations().getProperty(zoneName.replace(" ", "_")));
+    }
+
+    /**
      * Test for {@link BasqueTimeZoneNameProvider#getDisplayName(String, boolean, int, Locale)}.
      */
     @ParameterizedTest
@@ -86,12 +134,17 @@ class BasqueTimeZoneNameProviderTest {
     void testTimeZoneLongName(
             final @NotNull String zoneId) {
         final ZonedDateTime time = BasqueTimeZoneNameProvider.getReferenceTime(zoneId, false);
-        String expected = time.format(TO_LONG);
-        String result = provider.getDisplayName(zoneId, false, TimeZone.LONG, Basque.LOCALE);
-        assertNotEquals(
-                expected,
-                result,
-                () -> String.format("Unexpected name for Zone '%s'", zoneId));
+        final String engName = time.format(TO_LONG);
+        final String result = provider.getDisplayName(zoneId, false, TimeZone.LONG, Basque.LOCALE);
+        if (engName.startsWith("GMT+") || engName.startsWith("GMT-")) {
+            assertNull(result);
+        } else {
+            final String expected = provider.getTranslations().getProperty(engName.replace(" ", "_"));
+            assertEquals(
+                    expected,
+                    result,
+                    () -> String.format("Unexpected name for Zone '%s'", zoneId));
+        }
     }
 
     /**
@@ -102,12 +155,17 @@ class BasqueTimeZoneNameProviderTest {
     void testTimeZoneDstLongName(
             final @NotNull String zoneId) {
         final ZonedDateTime time = BasqueTimeZoneNameProvider.getReferenceTime(zoneId, true);
-        String expected = time.format(TO_LONG);
-        String result = provider.getDisplayName(zoneId, true, TimeZone.LONG, Basque.LOCALE);
-        assertNotEquals(
-                expected,
-                result,
-                () -> String.format("Unexpected name for Zone '%s'", zoneId));
+        final String engName = time.format(TO_LONG);
+        final String result = provider.getDisplayName(zoneId, true, TimeZone.LONG, Basque.LOCALE);
+        if (engName.startsWith("GMT+") || engName.startsWith("GMT-")) {
+            assertNull(result);
+        } else {
+            final String expected = provider.getTranslations().getProperty(engName.replace(" ", "_"));
+            assertEquals(
+                    expected,
+                    result,
+                    () -> String.format("Unexpected name for Zone '%s'", zoneId));
+        }
     }
 
     /**
@@ -117,6 +175,33 @@ class BasqueTimeZoneNameProviderTest {
      */
     static Stream<Arguments> timeZoneIds() {
         final ArrayList<String> list = new ArrayList<>(ZoneId.getAvailableZoneIds());
+        Collections.sort(list);
+        return list.stream().map(id -> Arguments.of(id));
+    }
+
+    /**
+     * Source of time zone IDs for {@code testTimeZoneName}.
+     * 
+     * @return The time zone IDs.
+     */
+    static Stream<Arguments> englishTimeZoneNames() {
+        final HashSet<String> names = new HashSet<>(ZoneId.getAvailableZoneIds()
+                .stream()
+                .map(zone -> {
+                    final ZonedDateTime time = BasqueTimeZoneNameProvider.getReferenceTime(zone, false);
+                    return time.format(TO_LONG);
+                })
+                .filter(name -> !name.startsWith("GMT+") && !name.startsWith("GMT-"))
+                .collect(Collectors.toList()));
+        names.addAll(ZoneId.getAvailableZoneIds()
+                .stream()
+                .map(zone -> {
+                    final ZonedDateTime time = BasqueTimeZoneNameProvider.getReferenceTime(zone, true);
+                    return time.format(TO_LONG);
+                })
+                .filter(name -> !name.startsWith("GMT+") && !name.startsWith("GMT-"))
+                .collect(Collectors.toList()));
+        final ArrayList<String> list = new ArrayList<>(names);
         Collections.sort(list);
         return list.stream().map(id -> Arguments.of(id));
     }
