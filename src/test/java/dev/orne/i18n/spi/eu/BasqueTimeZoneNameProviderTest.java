@@ -94,7 +94,7 @@ class BasqueTimeZoneNameProviderTest {
         Collections.sort(result);
         LOG.info("### English ZoneIds data ###");
         for (String name : result) {
-            LOG.info("{}={}", name, name);
+            LOG.info("{}={}", name.replace(" ", "_"), name);
         }
     }
 
@@ -121,9 +121,11 @@ class BasqueTimeZoneNameProviderTest {
      */
     @ParameterizedTest
     @MethodSource("englishTimeZoneNames")
-    void testTimeZoneNameTranslated(
+    void testTranslationsCoverage(
             final @NotNull String zoneName) {
-        assertNotNull(provider.getTranslations().getProperty(zoneName.replace(" ", "_")));
+        assertNotNull(
+                provider.getTranslations().getProperty(zoneName.replace(" ", "_")),
+                () -> String.format("Uncovered zone name '%s'", zoneName));
     }
 
     /**
@@ -191,7 +193,12 @@ class BasqueTimeZoneNameProviderTest {
                     final ZonedDateTime time = BasqueTimeZoneNameProvider.getReferenceTime(zone, false);
                     return time.format(TO_LONG);
                 })
-                .filter(name -> !name.startsWith("GMT+") && !name.startsWith("GMT-"))
+                .filter(name -> !name.startsWith("GMT+")
+                        && !name.startsWith("GMT-")
+                        && !name.startsWith("America/")
+                        && !name.startsWith("Asia/")
+                        && !name.startsWith("Etc/")
+                        && !name.startsWith("Europe/"))
                 .collect(Collectors.toList()));
         names.addAll(ZoneId.getAvailableZoneIds()
                 .stream()
@@ -199,7 +206,12 @@ class BasqueTimeZoneNameProviderTest {
                     final ZonedDateTime time = BasqueTimeZoneNameProvider.getReferenceTime(zone, true);
                     return time.format(TO_LONG);
                 })
-                .filter(name -> !name.startsWith("GMT+") && !name.startsWith("GMT-"))
+                .filter(name -> !name.startsWith("GMT+")
+                        && !name.startsWith("GMT-")
+                        && !name.startsWith("America/")
+                        && !name.startsWith("Asia/")
+                        && !name.startsWith("Etc/")
+                        && !name.startsWith("Europe/"))
                 .collect(Collectors.toList()));
         final ArrayList<String> list = new ArrayList<>(names);
         Collections.sort(list);

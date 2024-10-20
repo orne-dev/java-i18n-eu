@@ -39,14 +39,24 @@ import javax.validation.constraints.NotNull;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Unit tests for {@code BasqueCurrencyNameProvider}.
+ * Tests that the English test resources output same results as reference
+ * JREs (8, 11, 17 and 21 to date).
+ * The point of these tests is to detect data changes in incoming JREs
+ * to update/improve real Basque resources, which are expected to produce
+ * updated results even with old JREs.
  * 
  * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2024-10
@@ -54,15 +64,20 @@ import org.slf4j.LoggerFactory;
  * @see BasqueCurrencyNameProvider
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class EnglishCurrencyNamesTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(EnglishCurrencyNamesTest.class);
 
-    private static final Properties esData;
+    /** The provider instance to test. */
+    private @Spy BasqueCurrencyNameProvider provider;
+
+    private static final Properties data;
+    static boolean dataFixed;
     static {
         try (final InputStream is = EnglishCurrencyNamesTest.class.getResourceAsStream("currencies_en.properties")) {
-            esData = new Properties();
-            esData.load(is);
+            data = new Properties();
+            data.load(is);
         } catch (IOException e) {
             throw new AssertionError("Error loading english currency names", e);
         }
@@ -94,12 +109,57 @@ class EnglishCurrencyNamesTest {
     /**
      * Test for {@link BasqueCurrencyNameProvider#getSymbol(String, Locale)}.
      */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
     @ParameterizedTest
     @MethodSource("currencyCodes")
     void testSymbol(
             final @NotNull Currency currency) {
-        final BasqueCurrencyNameProvider provider = spy(new BasqueCurrencyNameProvider());
-        willReturn(esData).given(provider).getCurrencies();
+        assertSymbol(currency);
+    }
+
+    /**
+     * Test for {@link BasqueCurrencyNameProvider#getSymbol(String, Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_17, max = JRE.JAVA_17,
+            disabledReason = "JRE 17 only test")
+    @ParameterizedTest
+    @MethodSource("currencyCodes")
+    void testSymbolJre17(
+            final @NotNull Currency currency) {
+        withJre17Data();
+        assertSymbol(currency);
+    }
+
+    /**
+     * Test for {@link BasqueCurrencyNameProvider#getSymbol(String, Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_11, max = JRE.JAVA_11,
+            disabledReason = "JRE 11 only test")
+    @ParameterizedTest
+    @MethodSource("currencyCodes")
+    void testSymbolJre11(
+            final @NotNull Currency currency) {
+        withJre11Data();
+        assertSymbol(currency);
+    }
+
+    /**
+     * Test for {@link BasqueCurrencyNameProvider#getSymbol(String, Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_8,
+            disabledReason = "JRE 8 only test")
+    @ParameterizedTest
+    @MethodSource("currencyCodes")
+    void testSymbolJre8(
+            final @NotNull Currency currency) {
+        withJre8Data();
+        assertSymbol(currency);
+    }
+
+    void assertSymbol(
+            final @NotNull Currency currency) {
+        willReturn(data).given(provider).getCurrencies();
         String expected = currency.getSymbol(Locale.ENGLISH);
         String result = provider.getSymbol(currency.getCurrencyCode(), Basque.LOCALE);
         assertEquals(
@@ -111,18 +171,96 @@ class EnglishCurrencyNamesTest {
     /**
      * Test for {@link BasqueCurrencyNameProvider#getDisplayName(String, Locale)}.
      */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
     @ParameterizedTest
     @MethodSource("currencyCodes")
     void testDisplayName(
             final @NotNull Currency currency) {
-        final BasqueCurrencyNameProvider provider = spy(new BasqueCurrencyNameProvider());
-        willReturn(esData).given(provider).getCurrencies();
+        assertDisplayName(currency);
+    }
+
+    /**
+     * Test for {@link BasqueCurrencyNameProvider#getDisplayName(String, Locale)} on JRE17.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_17, max = JRE.JAVA_17,
+            disabledReason = "JRE 17 only test")
+    @ParameterizedTest
+    @MethodSource("currencyCodes")
+    void testDisplayNameJre17(
+            final @NotNull Currency currency) {
+        withJre17Data();
+        assertDisplayName(currency);
+    }
+
+    /**
+     * Test for {@link BasqueCurrencyNameProvider#getDisplayName(String, Locale)} on JRE11.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_11, max = JRE.JAVA_11,
+            disabledReason = "JRE 11 only test")
+    @ParameterizedTest
+    @MethodSource("currencyCodes")
+    void testDisplayNameJre11(
+            final @NotNull Currency currency) {
+        withJre11Data();
+        assertDisplayName(currency);
+    }
+
+    /**
+     * Test for {@link BasqueCurrencyNameProvider#getDisplayName(String, Locale)} on JRE11.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_8,
+            disabledReason = "JRE 8 only test")
+    @ParameterizedTest
+    @MethodSource("currencyCodes")
+    void testDisplayNameJre8(
+            final @NotNull Currency currency) {
+        withJre8Data();
+        assertDisplayName(currency);
+    }
+
+    void assertDisplayName(
+            final @NotNull Currency currency) {
+        willReturn(data).given(provider).getCurrencies();
         String expected = currency.getDisplayName(Locale.ENGLISH);
         String result = provider.getDisplayName(currency.getCurrencyCode(), Basque.LOCALE);
         assertEquals(
                 expected,
                 result,
                 () -> String.format("Unexpected name for currency '%s'", currency.getCurrencyCode()));
+    }
+
+    static synchronized void withJre17Data() {
+        if (!dataFixed) {
+            try (final InputStream is = EnglishCurrencyNamesTest.class.getResourceAsStream("currencies_en.jre17.properties")) {
+                data.load(is);
+            } catch (IOException e) {
+                throw new AssertionError("Error loading english JRE 17 currency names", e);
+            }
+            dataFixed = true;
+        }
+    }
+
+    static synchronized void withJre11Data() {
+        if (!dataFixed) {
+            try (final InputStream is = EnglishCurrencyNamesTest.class.getResourceAsStream("currencies_en.jre11.properties")) {
+                data.load(is);
+            } catch (IOException e) {
+                throw new AssertionError("Error loading english JRE 11 currency names", e);
+            }
+            dataFixed = true;
+        }
+    }
+
+    static synchronized void withJre8Data() {
+        if (!dataFixed) {
+            try (final InputStream is = EnglishCurrencyNamesTest.class.getResourceAsStream("currencies_en.jre8.properties")) {
+                data.load(is);
+            } catch (IOException e) {
+                throw new AssertionError("Error loading english JRE 8 currency names", e);
+            }
+            dataFixed = true;
+        }
     }
 
     /**

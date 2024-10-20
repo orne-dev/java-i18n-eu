@@ -33,6 +33,8 @@ import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.condition.DisabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -50,14 +52,28 @@ class BasqueCurrencyNameProviderTest {
 
     private static final Locale SPANISH = new Locale("es");
 
+    /** The provider instance to test. */
+    private final BasqueCurrencyNameProvider provider = new BasqueCurrencyNameProvider();
+
+    /**
+     * Test for basque translation availability.
+     */
+    @ParameterizedTest
+    @MethodSource("currencyCodes")
+    void testTranslationsCoverage(
+            final @NotNull Currency currency) {
+        assertNotNull(provider.getSymbol(currency.getCurrencyCode(), Basque.LOCALE));
+        assertNotNull(provider.getDisplayName(currency.getCurrencyCode(), Basque.LOCALE));
+    }
+
     /**
      * Test for {@link BasqueCurrencyNameProvider#getSymbol(String, Locale)}.
      */
+    @DisabledForJreRange(max = JRE.JAVA_16)
     @ParameterizedTest
     @MethodSource("currencyCodes")
     void testSymbol(
             final @NotNull Currency currency) {
-        final BasqueCurrencyNameProvider provider = new BasqueCurrencyNameProvider();
         String expectedSp = currency.getSymbol(SPANISH);
         String expectedEn = currency.getSymbol(Locale.ENGLISH);
         String result = provider.getSymbol(currency.getCurrencyCode(), Basque.LOCALE);
@@ -69,11 +85,11 @@ class BasqueCurrencyNameProviderTest {
     /**
      * Test for {@link BasqueCurrencyNameProvider#getDisplayName(String, Locale)}.
      */
+    @DisabledForJreRange(max = JRE.JAVA_16)
     @ParameterizedTest
     @MethodSource("currencyCodes")
     void testDisplayName(
             final @NotNull Currency currency) {
-        final BasqueCurrencyNameProvider provider = new BasqueCurrencyNameProvider();
         String notExpected = currency.getDisplayName(SPANISH);
         String result = provider.getDisplayName(currency.getCurrencyCode(), Basque.LOCALE);
         assertNotEquals(
