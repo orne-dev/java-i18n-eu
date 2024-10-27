@@ -42,6 +42,8 @@ extends DecimalFormatSymbolsProvider {
     public static final char GROUPING_SEPARATOR = '.';
     /** The character used for decimal sign. */
     public static final char DECIMAL_SEPARATOR = ',';
+    /** The character used to represent minus sign. */
+    public static final char MINUS_SIGN = '-';
     /** The character used for percent sign. */
     public static final char PERCENT_SYMBOL = '%';
     /** The character used for per mille sign. */
@@ -57,6 +59,7 @@ extends DecimalFormatSymbolsProvider {
             final @NotNull Locale locale) {
         if (Basque.LANGUAGE.equals(locale.getLanguage())) {
             final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Basque.LOCALE);
+            symbols.setMinusSign(MINUS_SIGN);
             symbols.setGroupingSeparator(GROUPING_SEPARATOR);
             symbols.setDecimalSeparator(DECIMAL_SEPARATOR);
             symbols.setPercent(PERCENT_SYMBOL);

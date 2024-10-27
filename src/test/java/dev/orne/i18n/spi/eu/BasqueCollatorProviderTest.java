@@ -61,5 +61,6 @@ class BasqueCollatorProviderTest {
     void testCollator() {
         final Collator result = provider.getInstance(Basque.LOCALE);
         assertEquals(Collator.getInstance(new Locale("es")), result);
+        assertNull(provider.getInstance(new Locale("es")));
     }
 }

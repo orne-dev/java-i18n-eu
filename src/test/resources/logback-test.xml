@@ -31,7 +31,7 @@
     </encoder>
   </appender>
 
-  <root level="off">
+  <root level="OFF">
     <appender-ref ref="STDOUT" />
   </root>
 

@@ -137,6 +137,7 @@ class BasqueTimeZoneNameProviderTest {
             final @NotNull String zoneId) {
         final ZonedDateTime time = BasqueTimeZoneNameProvider.getReferenceTime(zoneId, false);
         final String engName = time.format(TO_LONG);
+        assertNull(provider.getDisplayName(zoneId, false, TimeZone.LONG, new Locale("es")));
         final String result = provider.getDisplayName(zoneId, false, TimeZone.LONG, Basque.LOCALE);
         if (engName.startsWith("GMT+") || engName.startsWith("GMT-")) {
             assertNull(result);
@@ -158,6 +159,7 @@ class BasqueTimeZoneNameProviderTest {
             final @NotNull String zoneId) {
         final ZonedDateTime time = BasqueTimeZoneNameProvider.getReferenceTime(zoneId, true);
         final String engName = time.format(TO_LONG);
+        assertNull(provider.getDisplayName(zoneId, true, TimeZone.LONG, new Locale("es")));
         final String result = provider.getDisplayName(zoneId, true, TimeZone.LONG, Basque.LOCALE);
         if (engName.startsWith("GMT+") || engName.startsWith("GMT-")) {
             assertNull(result);
