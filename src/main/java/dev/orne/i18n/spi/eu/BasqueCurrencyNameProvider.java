@@ -46,7 +46,7 @@ extends CurrencyNameProvider {
     private static final Logger LOG = Logger.getLogger(BasqueCurrencyNameProvider.class.getName());
 
     /** Suffix for currency symbol properties. */
-    private static final String SYMBOL_SUFFIX = ".symbol";
+    static final String SYMBOL_SUFFIX = ".symbol";
     /** The currency names. */
     private Properties currencies;
 
@@ -57,10 +57,7 @@ extends CurrencyNameProvider {
     public String getSymbol(
             final @NotNull String currencyCode,
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return getCurrencies().getProperty(currencyCode + SYMBOL_SUFFIX);
-        }
-        return null;
+        return getCurrencies().getProperty(currencyCode + SYMBOL_SUFFIX);
     }
 
     /**
@@ -70,14 +67,7 @@ extends CurrencyNameProvider {
     public String getDisplayName(
             final @NotNull String currencyCode,
             final @NotNull Locale locale) {
-        String name = null;
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            name = getCurrencies().getProperty(currencyCode);
-        }
-        if (name == null) {
-            name = super.getDisplayName(currencyCode, locale);
-        }
-        return name;
+        return getCurrencies().getProperty(currencyCode);
     }
 
     /**

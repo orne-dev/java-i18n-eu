@@ -25,11 +25,12 @@ package dev.orne.i18n.spi.eu;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.DecimalFormatSymbols;
-import java.util.Currency;
 import java.util.Locale;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 /**
  * Unit tests for {@code BasqueDecimalFormatSymbolsProvider}.
@@ -40,53 +41,80 @@ import org.junit.jupiter.api.Test;
  * @see BasqueDecimalFormatSymbolsProvider
  */
 @Tag("ut")
-class BasqueDecimalFormatSymbolsProviderTest {
+class BasqueDecimalFormatSymbolsProviderTest
+extends AbstractBasqueProviderTest<BasqueDecimalFormatSymbolsProvider> {
 
-    private static final Locale SPANISH = new Locale("es");
-
-    /** The provider instance to test. */
-    private final BasqueDecimalFormatSymbolsProvider provider = new BasqueDecimalFormatSymbolsProvider();
+    /**
+     * Creates a new instance.
+     */
+    BasqueDecimalFormatSymbolsProviderTest() {
+        super(new BasqueDecimalFormatSymbolsProvider());
+    }
 
     /**
      * Test for {@link BasqueDecimalFormatSymbolsProvider#getInstance(Locale)}.
      */
     @Test
     void testGetInstance() {
-        assertNull(provider.getInstance(Locale.ENGLISH));
-        final DecimalFormatSymbols esSymbols = DecimalFormatSymbols.getInstance(SPANISH);
-        final DecimalFormatSymbols result = provider.getInstance(Basque.LOCALE);
-        assertEquals(
-                Currency.getInstance(BasqueDecimalFormatSymbolsProvider.CURRENCY_CODE),
-                result.getCurrency());
-        assertEquals(
-                Currency.getInstance(BasqueDecimalFormatSymbolsProvider.CURRENCY_CODE).getSymbol(SPANISH),
-                result.getCurrencySymbol());
-        assertEquals(BasqueDecimalFormatSymbolsProvider.DECIMAL_SEPARATOR, result.getDecimalSeparator());
-        assertEquals(esSymbols.getDigit(), result.getDigit());
-        assertEquals(esSymbols.getExponentSeparator(), result.getExponentSeparator());
-        assertEquals(BasqueDecimalFormatSymbolsProvider.GROUPING_SEPARATOR, result.getGroupingSeparator());
-        assertEquals(esSymbols.getInfinity(), result.getInfinity());
-        assertEquals(BasqueDecimalFormatSymbolsProvider.CURRENCY_CODE, result.getInternationalCurrencySymbol());
-        assertEquals(BasqueDecimalFormatSymbolsProvider.MINUS_SIGN, result.getMinusSign());
-        assertEquals(esSymbols.getMonetaryDecimalSeparator(), result.getMonetaryDecimalSeparator());
-        assertEquals(esSymbols.getNaN(), result.getNaN());
-        assertEquals(esSymbols.getPatternSeparator(), result.getPatternSeparator());
-        assertEquals(BasqueDecimalFormatSymbolsProvider.PERCENT_SYMBOL, result.getPercent());
-        assertEquals(BasqueDecimalFormatSymbolsProvider.PERMILL_SYMBOL, result.getPerMill());
-        assertEquals(esSymbols.getZeroDigit(), result.getZeroDigit());
+        DecimalFormatSymbols result = provider.getInstance(Basque.LOCALE);
+        assertNotNull(result.getCurrency());
+        assertNotNull(result.getCurrencySymbol());
+        assertNotNull(result.getExponentSeparator());
+        assertNotNull(result.getInfinity());
+        assertNotNull(result.getInternationalCurrencySymbol());
+        assertNotNull(result.getNaN());
+        result = provider.getInstance(Basque.LOCALE_ES);
+        assertNotNull(result.getCurrency());
+        assertNotNull(result.getCurrencySymbol());
+        assertNotNull(result.getExponentSeparator());
+        assertNotNull(result.getInfinity());
+        assertNotNull(result.getInternationalCurrencySymbol());
+        assertNotNull(result.getNaN());
+        result = provider.getInstance(Basque.LOCALE_FR);
+        assertNotNull(result.getCurrency());
+        assertNotNull(result.getCurrencySymbol());
+        assertNotNull(result.getExponentSeparator());
+        assertNotNull(result.getInfinity());
+        assertNotNull(result.getInternationalCurrencySymbol());
+        assertNotNull(result.getNaN());
     }
 
     /**
-     * Test for {@link BasqueDecimalFormatSymbolsProvider#getAvailableLocales()}.
+     * Test for {@link BasqueDecimalFormatSymbolsProvider#getInstance(Locale)}.
      */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
     @Test
-    void testAvailableLocales() {
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE));
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE_ES));
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE_FR));
-        assertFalse(provider.isSupportedLocale(Locale.FRENCH));
-        assertFalse(provider.isSupportedLocale(Locale.FRANCE));
-        assertFalse(provider.isSupportedLocale(new Locale("es")));
-        assertFalse(provider.isSupportedLocale(new Locale("es", "ES")));
+    void testGetInstanceLatestCldr() {
+        assertSymbolsEquals(
+                DecimalFormatSymbols.getInstance(Basque.LOCALE),
+                provider.getInstance(Basque.LOCALE));
+        assertSymbolsEquals(
+                DecimalFormatSymbols.getInstance(Basque.LOCALE_ES),
+                provider.getInstance(Basque.LOCALE_ES));
+        assertSymbolsEquals(
+                DecimalFormatSymbols.getInstance(Basque.LOCALE_FR),
+                provider.getInstance(Basque.LOCALE_FR));
+    }
+
+    private void assertSymbolsEquals(
+            final DecimalFormatSymbols expected,
+            final DecimalFormatSymbols result) {
+        assertEquals(expected.getCurrency(), result.getCurrency());
+        assertEquals(expected.getCurrencySymbol(), result.getCurrencySymbol());
+        assertEquals(expected.getDecimalSeparator(), result.getDecimalSeparator());
+        assertEquals(expected.getDigit(), result.getDigit());
+        assertEquals(expected.getExponentSeparator(), result.getExponentSeparator());
+        assertEquals(expected.getGroupingSeparator(), result.getGroupingSeparator());
+        assertEquals(expected.getInfinity(), result.getInfinity());
+        assertEquals(expected.getInternationalCurrencySymbol(), result.getInternationalCurrencySymbol());
+        assertEquals(expected.getMinusSign(), result.getMinusSign());
+        assertEquals(expected.getMonetaryDecimalSeparator(), result.getMonetaryDecimalSeparator());
+        assertEquals(expected.getNaN(), result.getNaN());
+        assertEquals(expected.getPatternSeparator(), result.getPatternSeparator());
+        assertEquals(expected.getPercent(), result.getPercent());
+        assertEquals(expected.getPerMill(), result.getPerMill());
+        assertEquals(expected.getZeroDigit(), result.getZeroDigit());
+        assertEquals(expected, result);
     }
 }

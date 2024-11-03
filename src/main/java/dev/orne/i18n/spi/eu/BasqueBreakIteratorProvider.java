@@ -38,19 +38,13 @@ import javax.validation.constraints.NotNull;
 public class BasqueBreakIteratorProvider
 extends BreakIteratorProvider {
 
-    /** Spanish language locale. */
-    private static final Locale SPANISH = new Locale("es");
-
     /**
      * {@inheritDoc}
      */
     @Override
     public BreakIterator getWordInstance(
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return BreakIterator.getWordInstance(SPANISH);
-        }
-        return null;
+        return BreakIterator.getWordInstance(Locale.ENGLISH);
     }
 
     /**
@@ -59,10 +53,7 @@ extends BreakIteratorProvider {
     @Override
     public BreakIterator getLineInstance(
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return BreakIterator.getLineInstance(SPANISH);
-        }
-        return null;
+        return BreakIterator.getLineInstance(Locale.ENGLISH);
     }
 
     /**
@@ -71,10 +62,7 @@ extends BreakIteratorProvider {
     @Override
     public BreakIterator getCharacterInstance(
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return BreakIterator.getCharacterInstance(SPANISH);
-        }
-        return null;
+        return BreakIterator.getCharacterInstance(Locale.ENGLISH);
     }
 
     /**
@@ -83,10 +71,7 @@ extends BreakIteratorProvider {
     @Override
     public BreakIterator getSentenceInstance(
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return BreakIterator.getSentenceInstance(SPANISH);
-        }
-        return null;
+        return BreakIterator.getSentenceInstance(Locale.ENGLISH);
     }
 
     /**

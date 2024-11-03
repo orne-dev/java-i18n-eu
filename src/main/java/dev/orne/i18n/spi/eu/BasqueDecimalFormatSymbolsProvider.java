@@ -43,13 +43,54 @@ extends DecimalFormatSymbolsProvider {
     /** The character used for decimal sign. */
     public static final char DECIMAL_SEPARATOR = ',';
     /** The character used to represent minus sign. */
-    public static final char MINUS_SIGN = '-';
+    public static final char MINUS_SIGN = '−';
     /** The character used for percent sign. */
     public static final char PERCENT_SYMBOL = '%';
     /** The character used for per mille sign. */
     public static final char PERMILL_SYMBOL = '‰';
     /** The ISO 4217 currency code. */
     public static final String CURRENCY_CODE = "EUR";
+    /** The ISO 4217 no currency code. */
+    public static final String NO_CURRENCY_CODE = "XXX";
+
+    /** The decimal format symbols template. */
+    private final DecimalFormatSymbols symbols;
+    /** The decimal format symbols template. */
+    private final DecimalFormatSymbols symbolsEs;
+    /** The decimal format symbols template. */
+    private final DecimalFormatSymbols symbolsFr;
+
+    /**
+     * Creates a new instance.
+     */
+    public BasqueDecimalFormatSymbolsProvider() {
+        super();
+        this.symbols = new DecimalFormatSymbols(Basque.LOCALE);
+        this.symbols.setMinusSign(MINUS_SIGN);
+        this.symbols.setGroupingSeparator(GROUPING_SEPARATOR);
+        this.symbols.setDecimalSeparator(DECIMAL_SEPARATOR);
+        this.symbols.setPercent(PERCENT_SYMBOL);
+        this.symbols.setPerMill(PERMILL_SYMBOL);
+        this.symbols.setInternationalCurrencySymbol(NO_CURRENCY_CODE);
+        this.symbols.setMonetaryDecimalSeparator(DECIMAL_SEPARATOR);
+        this.symbolsEs = new DecimalFormatSymbols(Basque.LOCALE_ES);
+        this.symbolsEs.setMinusSign(MINUS_SIGN);
+        this.symbolsEs.setGroupingSeparator(GROUPING_SEPARATOR);
+        this.symbolsEs.setDecimalSeparator(DECIMAL_SEPARATOR);
+        this.symbolsEs.setPercent(PERCENT_SYMBOL);
+        this.symbolsEs.setPerMill(PERMILL_SYMBOL);
+        this.symbolsEs.setInternationalCurrencySymbol(CURRENCY_CODE);
+        this.symbolsEs.setMonetaryDecimalSeparator(DECIMAL_SEPARATOR);
+        this.symbolsFr = new DecimalFormatSymbols(Basque.LOCALE_FR);
+        this.symbolsFr.setMinusSign(MINUS_SIGN);
+        this.symbolsFr.setGroupingSeparator(GROUPING_SEPARATOR);
+        this.symbolsFr.setDecimalSeparator(DECIMAL_SEPARATOR);
+        this.symbolsFr.setPercent(PERCENT_SYMBOL);
+        this.symbolsFr.setPerMill(PERMILL_SYMBOL);
+        this.symbolsFr.setInternationalCurrencySymbol(CURRENCY_CODE);
+        this.symbolsFr.setMonetaryDecimalSeparator(DECIMAL_SEPARATOR);
+        
+    }
 
     /**
      * {@inheritDoc}
@@ -57,18 +98,12 @@ extends DecimalFormatSymbolsProvider {
     @Override
     public DecimalFormatSymbols getInstance(
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Basque.LOCALE);
-            symbols.setMinusSign(MINUS_SIGN);
-            symbols.setGroupingSeparator(GROUPING_SEPARATOR);
-            symbols.setDecimalSeparator(DECIMAL_SEPARATOR);
-            symbols.setPercent(PERCENT_SYMBOL);
-            symbols.setPerMill(PERMILL_SYMBOL);
-            symbols.setInternationalCurrencySymbol(CURRENCY_CODE);
-            symbols.setMonetaryDecimalSeparator(DECIMAL_SEPARATOR);
-            return symbols;
+        if (Basque.LOCALE_ES.equals(locale)) {
+            return (DecimalFormatSymbols) symbolsEs.clone();
+        } else if (Basque.LOCALE_FR.equals(locale)) {
+            return (DecimalFormatSymbols) symbolsFr.clone();
         }
-        return null;
+        return (DecimalFormatSymbols) symbols.clone();
     }
 
     /**

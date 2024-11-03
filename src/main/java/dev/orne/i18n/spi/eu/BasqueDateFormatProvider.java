@@ -41,17 +41,17 @@ extends DateFormatProvider {
 
     /** Time formats.  */
     static final String[] TIME_FORMATS = new String[] {
-            "HH:mm:ss zzzz",
-            "HH:mm:ss z",
+            "HH:mm:ss (zzzz)",
+            "HH:mm:ss (z)",
             "HH:mm:ss",
             "HH:mm"
     };
     /** Date formats.  */
     static final String[] DATE_FORMATS = new String[] {
-            "EEEE, yyyy'ko' MMMM'ren' d'a'",
-            "yyyy'ko' MMMM'ren' d'a'",
-            "yyyy/MM/dd",
-            "yy/MM/dd"
+            "y('e')'ko' MMMM'ren' d('a'), EEEE",
+            "y('e')'ko' MMMM'ren' d('a')",
+            "y('e')'ko' MMM d('a')",
+            "yy/M/d"
     };
 
     /**
@@ -61,10 +61,7 @@ extends DateFormatProvider {
     public DateFormat getDateInstance(
             final int style,
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return new SimpleDateFormat(getDateFormat(style), locale);
-        }
-        return null;
+        return new SimpleDateFormat(getDateFormat(style), locale);
     }
 
     /**
@@ -74,10 +71,7 @@ extends DateFormatProvider {
     public DateFormat getTimeInstance(
             final int style,
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return new SimpleDateFormat(getTimeFormat(style), locale);
-        }
-        return null;
+        return new SimpleDateFormat(getTimeFormat(style), locale);
     }
 
     /**
@@ -88,12 +82,9 @@ extends DateFormatProvider {
             final int dateStyle,
             final int timeStyle,
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return new SimpleDateFormat(
-                    getDateFormat(dateStyle) + " " + getTimeFormat(timeStyle),
-                    locale);
-        }
-        return null;
+        return new SimpleDateFormat(
+                getDateFormat(dateStyle) + " " + getTimeFormat(timeStyle),
+                locale);
     }
 
     /**

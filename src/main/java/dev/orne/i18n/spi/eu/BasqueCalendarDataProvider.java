@@ -44,7 +44,12 @@ extends CalendarDataProvider {
     @Override
     public int getFirstDayOfWeek(
             final @NotNull Locale locale) {
-        return Calendar.MONDAY;
+        if (Basque.LOCALE_ES.equals(locale) ||
+                Basque.LOCALE_FR.equals(locale)) {
+            return Calendar.MONDAY;
+        } else {
+            return Calendar.SUNDAY;
+        }
     }
 
     /**
@@ -53,7 +58,12 @@ extends CalendarDataProvider {
     @Override
     public int getMinimalDaysInFirstWeek(
             final @NotNull Locale locale) {
-        return 0;
+        if (Basque.LOCALE_ES.equals(locale) ||
+                Basque.LOCALE_FR.equals(locale)) {
+            return 4;
+        } else {
+            return 1;
+        }
     }
 
     /**

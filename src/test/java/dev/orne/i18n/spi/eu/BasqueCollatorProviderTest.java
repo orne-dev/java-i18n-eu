@@ -25,10 +25,13 @@ package dev.orne.i18n.spi.eu;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.Collator;
+import java.text.RuleBasedCollator;
 import java.util.Locale;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 /**
  * Unit tests for {@code BasqueCollatorProvider}.
@@ -39,19 +42,14 @@ import org.junit.jupiter.api.Test;
  * @see BasqueCollatorProvider
  */
 @Tag("ut")
-class BasqueCollatorProviderTest {
-
-    /** The provider instance to test. */
-    private final BasqueCollatorProvider provider = new BasqueCollatorProvider();
+class BasqueCollatorProviderTest
+extends AbstractBasqueProviderTest<BasqueCollatorProvider> {
 
     /**
-     * Test for {@link BasqueCollatorProvider#getAvailableLocales()}.
+     * Creates a new instance.
      */
-    @Test
-    void testAvailableLocales() {
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE));
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE_ES));
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE_FR));
+    BasqueCollatorProviderTest() {
+        super(new BasqueCollatorProvider());
     }
 
     /**
@@ -59,8 +57,80 @@ class BasqueCollatorProviderTest {
      */
     @Test
     void testCollator() {
-        final Collator result = provider.getInstance(Basque.LOCALE);
-        assertEquals(Collator.getInstance(new Locale("es")), result);
-        assertNull(provider.getInstance(new Locale("es")));
+        assertNotNull(provider.getInstance(Basque.LOCALE));
+        assertNotNull(provider.getInstance(Basque.LOCALE_ES));
+        assertNotNull(provider.getInstance(Basque.LOCALE_FR));
+    }
+
+    /**
+     * Test for {@link BasqueCollatorProvider#getInstance(Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
+    @Test
+    void testCollatorLatestJre() {
+        final RuleBasedCollator expected = assertInstanceOf(
+                RuleBasedCollator.class,
+                Collator.getInstance(Basque.LOCALE));
+        final RuleBasedCollator result = assertInstanceOf(
+                RuleBasedCollator.class,
+                provider.getInstance(Basque.LOCALE));
+        assertEquals(
+                expected.getRules(),
+                result.getRules());
+        assertEquals(
+                expected.getDecomposition(),
+                result.getDecomposition());
+        assertEquals(
+                expected.getStrength(),
+                result.getStrength());
+    }
+
+    /**
+     * Test for {@link BasqueCollatorProvider#getInstance(Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
+    @Test
+    void testCollatorLatestJreEs() {
+        final RuleBasedCollator expected = assertInstanceOf(
+                RuleBasedCollator.class,
+                Collator.getInstance(Basque.LOCALE_ES));
+        final RuleBasedCollator result = assertInstanceOf(
+                RuleBasedCollator.class,
+                provider.getInstance(Basque.LOCALE_ES));
+        assertEquals(
+                expected.getRules(),
+                result.getRules());
+        assertEquals(
+                expected.getDecomposition(),
+                result.getDecomposition());
+        assertEquals(
+                expected.getStrength(),
+                result.getStrength());
+    }
+
+    /**
+     * Test for {@link BasqueCollatorProvider#getInstance(Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
+    @Test
+    void testCollatorLatestJreFr() {
+        final RuleBasedCollator expected = assertInstanceOf(
+                RuleBasedCollator.class,
+                Collator.getInstance(Basque.LOCALE_FR));
+        final RuleBasedCollator result = assertInstanceOf(
+                RuleBasedCollator.class,
+                provider.getInstance(Basque.LOCALE_FR));
+        assertEquals(
+                expected.getRules(),
+                result.getRules());
+        assertEquals(
+                expected.getDecomposition(),
+                result.getDecomposition());
+        assertEquals(
+                expected.getStrength(),
+                result.getStrength());
     }
 }

@@ -27,6 +27,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.spi.NumberFormatProvider;
 import java.util.Locale;
+import java.util.function.Function;
 
 import javax.validation.constraints.NotNull;
 
@@ -45,22 +46,38 @@ extends NumberFormatProvider {
     /** The number format. */
     public static final String NUMBER_FORMAT = "#,##0.###;-#,##0.###";
     /** The percent format. */
-    public static final String PERCENT_FORMAT = "%#,##0";
+    public static final String PERCENT_FORMAT = "%\u00A0#,##0;-%\u00A0#,##0";
     /** The currency format. */
-    public static final String CURRENCY_FORMAT = "#,##0 ¤;-#,##0 ¤";
+    public static final String CURRENCY_FORMAT = "#,##0.00\u00A0¤;-#,##0.00\u00A0¤";
+
+    /** The decimal format symbols provider. */
+    private final @NotNull Function<Locale, DecimalFormatSymbols> symbolsProvider;
 
     /**
-     * {@inheritDoc}
+     * Creates a new instance.
      */
-    @Override
-    public NumberFormat getCurrencyInstance(
-            final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return new DecimalFormat(
-                    CURRENCY_FORMAT,
-                    DecimalFormatSymbols.getInstance(locale));
-        }
-        return null;
+    public BasqueNumberFormatProvider() {
+        this(DecimalFormatSymbols::getInstance);
+    }
+
+    /**
+     * Creates a new instance with the specified.
+     * 
+     * @param symbolsProvider The decimal format symbols provider.
+     */
+    protected BasqueNumberFormatProvider(
+            final @NotNull Function<Locale, DecimalFormatSymbols> symbolsProvider) {
+        super();
+        this.symbolsProvider = symbolsProvider;
+    }
+
+    /**
+     * Returns the decimal format symbols provider.
+     * 
+     * @return The decimal format symbols provider.
+     */
+    protected @NotNull Function<Locale, DecimalFormatSymbols> getSymbolsProvider() {
+        return this.symbolsProvider;
     }
 
     /**
@@ -69,12 +86,11 @@ extends NumberFormatProvider {
     @Override
     public NumberFormat getIntegerInstance(
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return new DecimalFormat(
-                    INTEGER_FORMAT,
-                    DecimalFormatSymbols.getInstance(locale));
-        }
-        return null;
+        final DecimalFormat result = new DecimalFormat(
+                INTEGER_FORMAT,
+                this.symbolsProvider.apply(locale));
+        result.setParseIntegerOnly(true);
+        return result;
     }
 
     /**
@@ -83,12 +99,9 @@ extends NumberFormatProvider {
     @Override
     public NumberFormat getNumberInstance(
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return new DecimalFormat(
-                    NUMBER_FORMAT,
-                    DecimalFormatSymbols.getInstance(locale));
-        }
-        return null;
+        return new DecimalFormat(
+                NUMBER_FORMAT,
+                this.symbolsProvider.apply(locale));
     }
 
     /**
@@ -97,12 +110,20 @@ extends NumberFormatProvider {
     @Override
     public NumberFormat getPercentInstance(
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            return new DecimalFormat(
-                    PERCENT_FORMAT,
-                    DecimalFormatSymbols.getInstance(locale));
-        }
-        return null;
+        return new DecimalFormat(
+                PERCENT_FORMAT,
+                this.symbolsProvider.apply(locale));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NumberFormat getCurrencyInstance(
+            final @NotNull Locale locale) {
+        return new DecimalFormat(
+                CURRENCY_FORMAT,
+                this.symbolsProvider.apply(locale));
     }
 
     /**

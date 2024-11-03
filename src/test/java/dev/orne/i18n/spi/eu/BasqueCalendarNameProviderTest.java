@@ -27,18 +27,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.junitpioneer.jupiter.cartesian.ArgumentSets;
-import org.junitpioneer.jupiter.cartesian.CartesianTest;
 
 /**
  * Unit tests for {@code BasqueCalendarNameProvider}.
@@ -49,838 +46,40 @@ import org.junitpioneer.jupiter.cartesian.CartesianTest;
  * @see BasqueCalendarNameProvider
  */
 @Tag("ut")
-class BasqueCalendarNameProviderTest {
-
-    /** The provider instance to test. */
-    private final BasqueCalendarNameProvider provider = new BasqueCalendarNameProvider();
+class BasqueCalendarNameProviderTest
+extends AbstractBasqueProviderTest<BasqueCalendarNameProvider> {
 
     /**
-     * Test for {@link BasqueCalendarNameProvider#getGregorianEraNames(int)}.
+     * Creates a new instance.
      */
-    @Test
-    void testGetGregorianEraNames() {
-        assertArrayEquals(
-                BasqueCalendarNameProvider.GREGORIAN_ERAS_LONG,
-                BasqueCalendarNameProvider.getGregorianEraNames(Calendar.LONG_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.GREGORIAN_ERAS_LONG,
-                BasqueCalendarNameProvider.getGregorianEraNames(Calendar.LONG_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT,
-                BasqueCalendarNameProvider.getGregorianEraNames(Calendar.SHORT_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT,
-                BasqueCalendarNameProvider.getGregorianEraNames(Calendar.SHORT_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT,
-                BasqueCalendarNameProvider.getGregorianEraNames(Calendar.NARROW_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT,
-                BasqueCalendarNameProvider.getGregorianEraNames(Calendar.NARROW_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.GREGORIAN_ERAS_LONG,
-                BasqueCalendarNameProvider.getGregorianEraNames(Integer.MAX_VALUE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.GREGORIAN_ERAS_LONG,
-                BasqueCalendarNameProvider.getGregorianEraNames(Integer.MIN_VALUE));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getBuddhistEraNames(int)}.
-     */
-    @Test
-    void testGetBuddhistEraNames() {
-        assertArrayEquals(
-                BasqueCalendarNameProvider.BUDDHIST_ERAS_LONG,
-                BasqueCalendarNameProvider.getBuddhistEraNames(Calendar.LONG_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.BUDDHIST_ERAS_LONG,
-                BasqueCalendarNameProvider.getBuddhistEraNames(Calendar.LONG_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.BUDDHIST_ERAS_SHORT,
-                BasqueCalendarNameProvider.getBuddhistEraNames(Calendar.SHORT_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.BUDDHIST_ERAS_SHORT,
-                BasqueCalendarNameProvider.getBuddhistEraNames(Calendar.SHORT_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.BUDDHIST_ERAS_SHORT,
-                BasqueCalendarNameProvider.getBuddhistEraNames(Calendar.NARROW_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.BUDDHIST_ERAS_SHORT,
-                BasqueCalendarNameProvider.getBuddhistEraNames(Calendar.NARROW_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.BUDDHIST_ERAS_LONG,
-                BasqueCalendarNameProvider.getBuddhistEraNames(Integer.MAX_VALUE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.BUDDHIST_ERAS_LONG,
-                BasqueCalendarNameProvider.getBuddhistEraNames(Integer.MIN_VALUE));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getJapaneseEraNames(int)}.
-     */
-    @Test
-    void testGetJapaneseEraNames() {
-        assertArrayEquals(
-                BasqueCalendarNameProvider.JAPANESE_ERAS_LONG,
-                BasqueCalendarNameProvider.getJapaneseEraNames(Calendar.LONG_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.JAPANESE_ERAS_LONG,
-                BasqueCalendarNameProvider.getJapaneseEraNames(Calendar.LONG_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.JAPANESE_ERAS_SHORT,
-                BasqueCalendarNameProvider.getJapaneseEraNames(Calendar.SHORT_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.JAPANESE_ERAS_SHORT,
-                BasqueCalendarNameProvider.getJapaneseEraNames(Calendar.SHORT_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.JAPANESE_ERAS_SHORT,
-                BasqueCalendarNameProvider.getJapaneseEraNames(Calendar.NARROW_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.JAPANESE_ERAS_SHORT,
-                BasqueCalendarNameProvider.getJapaneseEraNames(Calendar.NARROW_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.JAPANESE_ERAS_LONG,
-                BasqueCalendarNameProvider.getJapaneseEraNames(Integer.MAX_VALUE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.JAPANESE_ERAS_LONG,
-                BasqueCalendarNameProvider.getJapaneseEraNames(Integer.MIN_VALUE));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getMinguoEraNames(int)}.
-     */
-    @Test
-    void testGetMinguoEraNames() {
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MINGUO_ERAS_LONG,
-                BasqueCalendarNameProvider.getMinguoEraNames(Calendar.LONG_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MINGUO_ERAS_LONG,
-                BasqueCalendarNameProvider.getMinguoEraNames(Calendar.LONG_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MINGUO_ERAS_SHORT,
-                BasqueCalendarNameProvider.getMinguoEraNames(Calendar.SHORT_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MINGUO_ERAS_SHORT,
-                BasqueCalendarNameProvider.getMinguoEraNames(Calendar.SHORT_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MINGUO_ERAS_SHORT,
-                BasqueCalendarNameProvider.getMinguoEraNames(Calendar.NARROW_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MINGUO_ERAS_SHORT,
-                BasqueCalendarNameProvider.getMinguoEraNames(Calendar.NARROW_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MINGUO_ERAS_LONG,
-                BasqueCalendarNameProvider.getMinguoEraNames(Integer.MAX_VALUE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MINGUO_ERAS_LONG,
-                BasqueCalendarNameProvider.getMinguoEraNames(Integer.MIN_VALUE));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getIslamicEraNames(int)}.
-     */
-    @Test
-    void testGetIslamicEraNames() {
-        assertArrayEquals(
-                BasqueCalendarNameProvider.ISLAMIC_ERAS_LONG,
-                BasqueCalendarNameProvider.getIslamicEraNames(Calendar.LONG_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.ISLAMIC_ERAS_LONG,
-                BasqueCalendarNameProvider.getIslamicEraNames(Calendar.LONG_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.ISLAMIC_ERAS_SHORT,
-                BasqueCalendarNameProvider.getIslamicEraNames(Calendar.SHORT_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.ISLAMIC_ERAS_SHORT,
-                BasqueCalendarNameProvider.getIslamicEraNames(Calendar.SHORT_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.ISLAMIC_ERAS_SHORT,
-                BasqueCalendarNameProvider.getIslamicEraNames(Calendar.NARROW_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.ISLAMIC_ERAS_SHORT,
-                BasqueCalendarNameProvider.getIslamicEraNames(Calendar.NARROW_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.ISLAMIC_ERAS_LONG,
-                BasqueCalendarNameProvider.getIslamicEraNames(Integer.MAX_VALUE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.ISLAMIC_ERAS_LONG,
-                BasqueCalendarNameProvider.getIslamicEraNames(Integer.MIN_VALUE));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getMonthNames(int)}.
-     */
-    @Test
-    void testGetMonthNames() {
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MONTHS_LONG,
-                BasqueCalendarNameProvider.getMonthNames(Calendar.LONG_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MONTHS_LONG,
-                BasqueCalendarNameProvider.getMonthNames(Calendar.LONG_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MONTHS_SHORT,
-                BasqueCalendarNameProvider.getMonthNames(Calendar.SHORT_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MONTHS_SHORT,
-                BasqueCalendarNameProvider.getMonthNames(Calendar.SHORT_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MONTHS_NARROW,
-                BasqueCalendarNameProvider.getMonthNames(Calendar.NARROW_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MONTHS_NARROW,
-                BasqueCalendarNameProvider.getMonthNames(Calendar.NARROW_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MONTHS_LONG,
-                BasqueCalendarNameProvider.getMonthNames(Integer.MAX_VALUE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.MONTHS_LONG,
-                BasqueCalendarNameProvider.getMonthNames(Integer.MIN_VALUE));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getWeekdayNames(int)}.
-     */
-    @Test
-    void testGetWeekdayNames() {
-        assertArrayEquals(
-                BasqueCalendarNameProvider.WEEKDAYS_LONG,
-                BasqueCalendarNameProvider.getWeekdayNames(Calendar.LONG_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.WEEKDAYS_LONG,
-                BasqueCalendarNameProvider.getWeekdayNames(Calendar.LONG_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.WEEKDAYS_SHORT,
-                BasqueCalendarNameProvider.getWeekdayNames(Calendar.SHORT_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.WEEKDAYS_SHORT,
-                BasqueCalendarNameProvider.getWeekdayNames(Calendar.SHORT_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.WEEKDAYS_NARROW,
-                BasqueCalendarNameProvider.getWeekdayNames(Calendar.NARROW_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.WEEKDAYS_NARROW,
-                BasqueCalendarNameProvider.getWeekdayNames(Calendar.NARROW_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.WEEKDAYS_LONG,
-                BasqueCalendarNameProvider.getWeekdayNames(Integer.MAX_VALUE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.WEEKDAYS_LONG,
-                BasqueCalendarNameProvider.getWeekdayNames(Integer.MIN_VALUE));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getAmPmNames(int)}.
-     */
-    @Test
-    void testGetAmPmNames() {
-        assertArrayEquals(
-                BasqueCalendarNameProvider.AMPM_MARKERS,
-                BasqueCalendarNameProvider.getAmPmNames(Calendar.LONG_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.AMPM_MARKERS,
-                BasqueCalendarNameProvider.getAmPmNames(Calendar.LONG_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.AMPM_MARKERS,
-                BasqueCalendarNameProvider.getAmPmNames(Calendar.SHORT_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.AMPM_MARKERS,
-                BasqueCalendarNameProvider.getAmPmNames(Calendar.SHORT_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.AMPM_MARKERS,
-                BasqueCalendarNameProvider.getAmPmNames(Calendar.NARROW_FORMAT));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.AMPM_MARKERS,
-                BasqueCalendarNameProvider.getAmPmNames(Calendar.NARROW_STANDALONE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.AMPM_MARKERS,
-                BasqueCalendarNameProvider.getAmPmNames(Integer.MAX_VALUE));
-        assertArrayEquals(
-                BasqueCalendarNameProvider.AMPM_MARKERS,
-                BasqueCalendarNameProvider.getAmPmNames(Integer.MIN_VALUE));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getValueName(IntFunction, int, int)}.
-     */
-    @Test
-    void testGetValueName() {
-        assertNull(BasqueCalendarNameProvider.getValueName(
-                null,
-                Calendar.LONG_FORMAT,
-                0));
-        assertNull(BasqueCalendarNameProvider.getValueName(
-                BasqueCalendarNameProvider::getMonthNames,
-                Calendar.LONG_FORMAT,
-                -1));
-        assertNull(BasqueCalendarNameProvider.getValueName(
-                BasqueCalendarNameProvider::getMonthNames,
-                Calendar.LONG_FORMAT,
-                BasqueCalendarNameProvider.MONTHS_LONG.length));
-        assertNull(BasqueCalendarNameProvider.getValueName(
-                style -> new String[0],
-                Calendar.LONG_FORMAT,
-                BasqueCalendarNameProvider.MONTHS_LONG.length));
-        assertEquals(
-                BasqueCalendarNameProvider.MONTHS_LONG[0],
-                BasqueCalendarNameProvider.getValueName(
-                    BasqueCalendarNameProvider::getMonthNames,
-                    Calendar.LONG_FORMAT,
-                    0));
-        assertEquals(
-                BasqueCalendarNameProvider.MONTHS_LONG[3],
-                BasqueCalendarNameProvider.getValueName(
-                    BasqueCalendarNameProvider::getMonthNames,
-                    Calendar.LONG_FORMAT,
-                    3));
-        assertEquals(
-                BasqueCalendarNameProvider.MONTHS_SHORT[0],
-                BasqueCalendarNameProvider.getValueName(
-                    BasqueCalendarNameProvider::getMonthNames,
-                    Calendar.SHORT_FORMAT,
-                    0));
-        assertEquals(
-                BasqueCalendarNameProvider.MONTHS_NARROW[0],
-                BasqueCalendarNameProvider.getValueName(
-                    BasqueCalendarNameProvider::getMonthNames,
-                    Calendar.NARROW_FORMAT,
-                    0));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#mergeNames(IntFunction, int...)}.
-     */
-    @Test
-    void testMergeNames() {
-        assertNull(BasqueCalendarNameProvider.mergeNames(
-                null));
-        assertNull(
-                BasqueCalendarNameProvider.mergeNames(
-                    BasqueCalendarNameProvider::getMonthNames));
-        Map<String, Integer> result = BasqueCalendarNameProvider.mergeNames(
-                BasqueCalendarNameProvider::getMonthNames,
-                Calendar.LONG_FORMAT);
-        assertEquals(
-                BasqueCalendarNameProvider.MONTHS_LONG.length,
-                result.size());
-        assertEquals(
-                Calendar.JANUARY,
-                result.get(BasqueCalendarNameProvider.MONTHS_LONG[0]));
-        result = BasqueCalendarNameProvider.mergeNames(
-                BasqueCalendarNameProvider::getMonthNames,
-                Calendar.LONG_FORMAT,
-                Calendar.SHORT_FORMAT);
-        assertEquals(
-                BasqueCalendarNameProvider.MONTHS_LONG.length
-                    + BasqueCalendarNameProvider.MONTHS_SHORT.length,
-                result.size());
-        assertEquals(
-                Calendar.JANUARY,
-                result.get(BasqueCalendarNameProvider.MONTHS_LONG[0]));
-        assertEquals(
-                Calendar.JANUARY,
-                result.get(BasqueCalendarNameProvider.MONTHS_SHORT[0]));
-        result = BasqueCalendarNameProvider.mergeNames(
-                format -> format == Calendar.LONG_FORMAT ? BasqueCalendarNameProvider.MONTHS_LONG : null,
-                Calendar.LONG_FORMAT,
-                Calendar.SHORT_FORMAT);
-        assertEquals(
-                BasqueCalendarNameProvider.MONTHS_LONG.length,
-                result.size());
-        assertEquals(
-                Calendar.JANUARY,
-                result.get(BasqueCalendarNameProvider.MONTHS_LONG[0]));
-        assertEquals(
-                null,
-                result.get(BasqueCalendarNameProvider.MONTHS_SHORT[0]));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getFieldNamesFunction}.
-     */
-    @CartesianTest
-    @CartesianTest.MethodFactory("testGetFieldNamesFunction")
-    void testGetFieldNamesFunction(
-            final String calendarType,
-            final int field) {
-        final IntFunction<String[]> result = BasqueCalendarNameProvider.getFieldNamesFunction(
-                calendarType,
-                field);
-        switch (field) {
-            case Calendar.ERA:
-                if (calendarType == null) {
-                    assertNotNull(result);
-                    assertSame(
-                            BasqueCalendarNameProvider.getGregorianEraNames(Calendar.LONG_FORMAT),
-                            result.apply(Calendar.LONG_FORMAT));
-                } else {
-                    
-                    switch (calendarType) {
-                    case BasqueCalendarNameProvider.GREGORIAN_CALENDAR:
-                        assertNotNull(result);
-                        assertSame(
-                                BasqueCalendarNameProvider.getGregorianEraNames(Calendar.LONG_FORMAT),
-                                result.apply(Calendar.LONG_FORMAT));
-                        break;
-                    case BasqueCalendarNameProvider.BUDDHIST_CALENDAR:
-                        assertNotNull(result);
-                        assertSame(
-                                BasqueCalendarNameProvider.getBuddhistEraNames(Calendar.LONG_FORMAT),
-                                result.apply(Calendar.LONG_FORMAT));
-                        break;
-                    case BasqueCalendarNameProvider.JAPANESE_CALENDAR:
-                        assertNotNull(result);
-                        assertSame(
-                                BasqueCalendarNameProvider.getJapaneseEraNames(Calendar.LONG_FORMAT),
-                                result.apply(Calendar.LONG_FORMAT));
-                        break;
-                    case BasqueCalendarNameProvider.MINGUO_CALENDAR:
-                        assertNotNull(result);
-                        assertSame(
-                                BasqueCalendarNameProvider.getMinguoEraNames(Calendar.LONG_FORMAT),
-                                result.apply(Calendar.LONG_FORMAT));
-                        break;
-                    case BasqueCalendarNameProvider.ISLAMIC_CALENDAR:
-                        assertNotNull(result);
-                        assertSame(
-                                BasqueCalendarNameProvider.getIslamicEraNames(Calendar.LONG_FORMAT),
-                                result.apply(Calendar.LONG_FORMAT));
-                        break;
-                    default:
-                        assertNull(result);
-                        break;
-                    }
-                }
-                break;
-            case Calendar.MONTH:
-                assertNotNull(result);
-                assertSame(
-                        BasqueCalendarNameProvider.getMonthNames(Calendar.LONG_FORMAT),
-                        result.apply(Calendar.LONG_FORMAT));
-                break;
-            case Calendar.DAY_OF_WEEK:
-                assertNotNull(result);
-                assertSame(
-                        BasqueCalendarNameProvider.getWeekdayNames(Calendar.LONG_FORMAT),
-                        result.apply(Calendar.LONG_FORMAT));
-                break;
-            case Calendar.AM_PM:
-                assertNotNull(result);
-                assertSame(
-                        BasqueCalendarNameProvider.getAmPmNames(Calendar.LONG_FORMAT),
-                        result.apply(Calendar.LONG_FORMAT));
-                break;
-            default:
-                assertNull(result);
-                break;
-        }
-    }
-
-    static ArgumentSets testGetFieldNamesFunction() {
-        return ArgumentSets
-                .argumentsForFirstParameter(calendarTypes())
-                .argumentsForNextParameter(calendarFields());
+    BasqueCalendarNameProviderTest() {
+        super(new BasqueCalendarNameProvider());
     }
 
     /**
      * Test for {@link BasqueCalendarNameProvider#getDisplayNames(String, int, int, Locale)}.
      */
-    @CartesianTest
-    @CartesianTest.MethodFactory("testGetDisplayNames")
+    @ParameterizedTest
+    @MethodSource("typeFieldStyle")
     void testGetDisplayNames(
-            final String calendarType,
+            final String type,
             final int field,
-            final int style,
-            final Locale locale) {
-        final Map<String, Integer> result = provider.getDisplayNames(calendarType, field, style, locale);
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            if (style == Calendar.ALL_STYLES) {
-                assertEquals(
-                        BasqueCalendarNameProvider.mergeNames(
-                            BasqueCalendarNameProvider.getFieldNamesFunction(calendarType, field),
-                            Calendar.LONG_FORMAT,
-                            Calendar.SHORT_FORMAT),
-                        result);
-            } else {
-                assertEquals(
-                        BasqueCalendarNameProvider.mergeNames(
-                            BasqueCalendarNameProvider.getFieldNamesFunction(calendarType, field),
-                            style),
-                        result);
-            }
+            final int style) {
+        if (field == Calendar.DAY_OF_WEEK && (style & Calendar.NARROW_FORMAT) != 0) {
+            assertNull(provider.getDisplayNames(type, field, style, Basque.LOCALE));
+            assertNull(provider.getDisplayNames(type, field, style, Basque.LOCALE_ES));
+            assertNull(provider.getDisplayNames(type, field, style, Basque.LOCALE_FR));
+        } else if (field == Calendar.ERA
+                || field == Calendar.MONTH
+                || field == Calendar.DAY_OF_WEEK
+                || field == Calendar.AM_PM) {
+            assertNotNull(provider.getDisplayNames(type, field, style, Basque.LOCALE));
+            assertNotNull(provider.getDisplayNames(type, field, style, Basque.LOCALE_ES));
+            assertNotNull(provider.getDisplayNames(type, field, style, Basque.LOCALE_FR));
         } else {
-            assertNull(result);
-        }
-    }
-
-    static ArgumentSets testGetDisplayNames() {
-        return ArgumentSets
-                .argumentsForFirstParameter(calendarTypes())
-                .argumentsForNextParameter(calendarFields())
-                .argumentsForNextParameter(calendarStyles())
-                .argumentsForNextParameter(testLocales());
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
-     */
-    @ParameterizedTest
-    @MethodSource("eras")
-    void testGetDisplayName_Era_Long(
-            final int value) {
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.GREGORIAN_ERAS_LONG, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.GREGORIAN_ERAS_LONG, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.BUDDHIST_ERAS_LONG, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.BUDDHIST_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.BUDDHIST_ERAS_LONG, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.BUDDHIST_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.JAPANESE_ERAS_LONG, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.JAPANESE_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.JAPANESE_ERAS_LONG, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.JAPANESE_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.ISLAMIC_ERAS_LONG, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.ISLAMIC_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.ISLAMIC_ERAS_LONG, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.ISLAMIC_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.MINGUO_ERAS_LONG, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.MINGUO_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.MINGUO_ERAS_LONG, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.MINGUO_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_STANDALONE,
-                    Basque.LOCALE));
-        assertNull(
-                provider.getDisplayName(
-                    "unsupported-calendar",
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertNull(
-                provider.getDisplayName(
-                    "unsupported-calendar",
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_STANDALONE,
-                    Basque.LOCALE));
-        assertNull(
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Locale.ENGLISH));
-        assertNull(
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.LONG_STANDALONE,
-                    Locale.ENGLISH));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
-     */
-    @ParameterizedTest
-    @MethodSource("eras")
-    void testGetDisplayName_Era_Short(
-            final int value) {
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.BUDDHIST_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.BUDDHIST_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.BUDDHIST_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.BUDDHIST_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.JAPANESE_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.JAPANESE_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.JAPANESE_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.JAPANESE_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.ISLAMIC_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.ISLAMIC_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.ISLAMIC_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.ISLAMIC_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.MINGUO_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.MINGUO_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.MINGUO_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.MINGUO_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_STANDALONE,
-                    Basque.LOCALE));
-        assertNull(
-                provider.getDisplayName(
-                    "unsupported-calendar",
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertNull(
-                provider.getDisplayName(
-                    "unsupported-calendar",
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_STANDALONE,
-                    Basque.LOCALE));
-        assertNull(
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Locale.ENGLISH));
-        assertNull(
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.SHORT_STANDALONE,
-                    Locale.ENGLISH));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
-     */
-    @ParameterizedTest
-    @MethodSource("eras")
-    void testGetDisplayName_Era_Narrow(
-            final int value) {
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.BUDDHIST_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.BUDDHIST_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.BUDDHIST_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.BUDDHIST_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.JAPANESE_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.JAPANESE_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.JAPANESE_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.JAPANESE_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.ISLAMIC_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.ISLAMIC_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.ISLAMIC_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.ISLAMIC_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.MINGUO_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.MINGUO_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                eraName(BasqueCalendarNameProvider.MINGUO_ERAS_SHORT, value),
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.MINGUO_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_STANDALONE,
-                    Basque.LOCALE));
-        assertNull(
-                provider.getDisplayName(
-                    "unsupported-calendar",
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertNull(
-                provider.getDisplayName(
-                        "unsupported-calendar",
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_STANDALONE,
-                    Basque.LOCALE));
-        assertNull(
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Locale.ENGLISH));
-        assertNull(
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.ERA,
-                    value,
-                    Calendar.NARROW_STANDALONE,
-                    Locale.ENGLISH));
-    }
-
-    private String eraName(
-            final String[] names,
-            final int value) {
-        if (value < 0 || value >= names.length) {
-            return null;
-        } else {
-            return names[value];
+            assertNull(provider.getDisplayNames(type, field, style, Basque.LOCALE));
+            assertNull(provider.getDisplayNames(type, field, style, Basque.LOCALE_ES));
+            assertNull(provider.getDisplayNames(type, field, style, Basque.LOCALE_FR));
         }
     }
 
@@ -888,399 +87,118 @@ class BasqueCalendarNameProviderTest {
      * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
      */
     @ParameterizedTest
-    @MethodSource("months")
-    void testGetDisplayName_Month_Long(
-            final int value) {
-        final String expected;
-        if (Calendar.UNDECIMBER == value) {
-            expected = null;
-        } else {
-            expected = BasqueCalendarNameProvider.MONTHS_LONG[value];
+    @MethodSource("typesErasStyles")
+    void testGetDisplayName_Era(
+            final String type,
+            final int value,
+            final int style) {
+        final int values;
+        switch (type) {
+            case BasqueCalendarNameProvider.GREGORIAN_CALENDAR:
+                values = BasqueCalendarNameProvider.GREGORIAN_ERAS_LONG.length;
+                break;
+            case BasqueCalendarNameProvider.BUDDHIST_CALENDAR:
+                values = BasqueCalendarNameProvider.BUDDHIST_ERAS_LONG.length;
+                break;
+            case BasqueCalendarNameProvider.JAPANESE_CALENDAR:
+                values = BasqueCalendarNameProvider.JAPANESE_ERAS_LONG.length;
+                break;
+            case BasqueCalendarNameProvider.MINGUO_CALENDAR:
+                values = BasqueCalendarNameProvider.MINGUO_ERAS_LONG.length;
+                break;
+            case BasqueCalendarNameProvider.ISLAMIC_CALENDAR:
+                values = BasqueCalendarNameProvider.ISLAMIC_ERAS_LONG.length;
+                break;
+            default:
+                values = 0;
+                break;
         }
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.MONTH,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.MONTH,
-                    value,
-                    Calendar.LONG_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    "any-calendar",
-                    Calendar.MONTH,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertNull(provider.getDisplayName(
-                BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                Calendar.MONTH,
-                value,
-                Calendar.LONG_FORMAT,
-                Locale.ENGLISH));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
-     */
-    @ParameterizedTest
-    @MethodSource("months")
-    void testGetDisplayName_Month_Short(
-            final int value) {
-        final String expected;
-        if (Calendar.UNDECIMBER == value) {
-            expected = null;
+        if (value < values) {
+            assertNotNull(provider.getDisplayName(type, Calendar.ERA, value, style, Basque.LOCALE));
+            assertNotNull(provider.getDisplayName(type, Calendar.ERA, value, style, Basque.LOCALE_ES));
+            assertNotNull(provider.getDisplayName(type, Calendar.ERA, value, style, Basque.LOCALE_FR));
         } else {
-            expected = BasqueCalendarNameProvider.MONTHS_SHORT[value];
+            assertNull(provider.getDisplayName(type, Calendar.ERA, value, style, Basque.LOCALE));
+            assertNull(provider.getDisplayName(type, Calendar.ERA, value, style, Basque.LOCALE_ES));
+            assertNull(provider.getDisplayName(type, Calendar.ERA, value, style, Basque.LOCALE_FR));
         }
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.MONTH,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.MONTH,
-                    value,
-                    Calendar.SHORT_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    "any-calendar",
-                    Calendar.MONTH,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertNull(provider.getDisplayName(
-                BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                Calendar.MONTH,
-                value,
-                Calendar.SHORT_FORMAT,
-                Locale.ENGLISH));
     }
 
     /**
      * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
      */
     @ParameterizedTest
-    @MethodSource("months")
-    void testGetDisplayName_Month_Narrow(
-            final int value) {
-        final String expected;
-        if (Calendar.UNDECIMBER == value) {
-            expected = null;
+    @MethodSource("typesMonthsStyles")
+    void testGetDisplayName_Month(
+            final String type,
+            final int value,
+            final int style) {
+        assertNotNull(provider.getDisplayName(type, Calendar.MONTH, value, style, Basque.LOCALE));
+        assertNotNull(provider.getDisplayName(type, Calendar.MONTH, value, style, Basque.LOCALE_ES));
+        assertNotNull(provider.getDisplayName(type, Calendar.MONTH, value, style, Basque.LOCALE_FR));
+    }
+
+    /**
+     * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
+     */
+    @ParameterizedTest
+    @MethodSource("typesWeekdaysStyles")
+    void testGetDisplayName_Weekday(
+            final String type,
+            final int value,
+            final int style) {
+        if ((style & Calendar.NARROW_FORMAT) == 0) {
+            assertNotNull(provider.getDisplayName(type, Calendar.DAY_OF_WEEK, value, style, Basque.LOCALE));
+            assertNotNull(provider.getDisplayName(type, Calendar.DAY_OF_WEEK, value, style, Basque.LOCALE_ES));
+            assertNotNull(provider.getDisplayName(type, Calendar.DAY_OF_WEEK, value, style, Basque.LOCALE_FR));
         } else {
-            expected = BasqueCalendarNameProvider.MONTHS_NARROW[value];
+            assertNull(provider.getDisplayName(type, Calendar.DAY_OF_WEEK, value, style, Basque.LOCALE));
+            assertNull(provider.getDisplayName(type, Calendar.DAY_OF_WEEK, value, style, Basque.LOCALE_ES));
+            assertNull(provider.getDisplayName(type, Calendar.DAY_OF_WEEK, value, style, Basque.LOCALE_FR));
         }
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.MONTH,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.MONTH,
-                    value,
-                    Calendar.NARROW_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    "any-calendar",
-                    Calendar.MONTH,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertNull(provider.getDisplayName(
-                BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                Calendar.MONTH,
-                value,
-                Calendar.NARROW_FORMAT,
-                Locale.ENGLISH));
     }
 
     /**
      * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
      */
     @ParameterizedTest
-    @MethodSource("weekdays")
-    void testGetDisplayName_Weekday_Long(
-            final int value) {
-        final String expected = BasqueCalendarNameProvider.WEEKDAYS_LONG[value];
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.DAY_OF_WEEK,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.DAY_OF_WEEK,
-                    value,
-                    Calendar.LONG_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    "any-calendar",
-                    Calendar.DAY_OF_WEEK,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertNull(provider.getDisplayName(
-                BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                Calendar.DAY_OF_WEEK,
-                value,
-                Calendar.LONG_FORMAT,
-                Locale.ENGLISH));
+    @MethodSource("typesAmPmStyles")
+    void testGetDisplayName_AmPm(
+            final String type,
+            final int value,
+            final int style) {
+        assertNotNull(provider.getDisplayName(type, Calendar.AM_PM, value, style, Basque.LOCALE));
+        assertNotNull(provider.getDisplayName(type, Calendar.AM_PM, value, style, Basque.LOCALE_ES));
+        assertNotNull(provider.getDisplayName(type, Calendar.AM_PM, value, style, Basque.LOCALE_FR));
     }
 
     /**
      * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
      */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE >= 21 test")
     @ParameterizedTest
-    @MethodSource("weekdays")
-    void testGetDisplayName_Weekday_Short(
-            final int value) {
-        final String expected = BasqueCalendarNameProvider.WEEKDAYS_SHORT[value];
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.DAY_OF_WEEK,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.DAY_OF_WEEK,
-                    value,
-                    Calendar.SHORT_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    "any-calendar",
-                    Calendar.DAY_OF_WEEK,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertNull(provider.getDisplayName(
-                BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                Calendar.DAY_OF_WEEK,
-                value,
-                Calendar.SHORT_FORMAT,
-                Locale.ENGLISH));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
-     */
-    @ParameterizedTest
-    @MethodSource("weekdays")
-    void testGetDisplayName_Weekday_Narrow(
-            final int value) {
-        final String expected = BasqueCalendarNameProvider.WEEKDAYS_NARROW[value];
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.DAY_OF_WEEK,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.DAY_OF_WEEK,
-                    value,
-                    Calendar.NARROW_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    "any-calendar",
-                    Calendar.DAY_OF_WEEK,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertNull(provider.getDisplayName(
-                BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                Calendar.DAY_OF_WEEK,
-                value,
-                Calendar.NARROW_FORMAT,
-                Locale.ENGLISH));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
-     */
-    @ParameterizedTest
-    @ValueSource(ints = { Calendar.AM, Calendar.PM })
-    void testGetDisplayName_AmPm_Long(
-            final int value) {
-        final String expected = BasqueCalendarNameProvider.AMPM_MARKERS[value];
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.AM_PM,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.AM_PM,
-                    value,
-                    Calendar.LONG_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    "any-calendar",
-                    Calendar.AM_PM,
-                    value,
-                    Calendar.LONG_FORMAT,
-                    Basque.LOCALE));
-        assertNull(provider.getDisplayName(
-                BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                Calendar.AM_PM,
-                value,
-                Calendar.LONG_FORMAT,
-                Locale.ENGLISH));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
-     */
-    @ParameterizedTest
-    @ValueSource(ints = { Calendar.AM, Calendar.PM })
-    void testGetDisplayName_AmPm_Short(
-            final int value) {
-        final String expected = BasqueCalendarNameProvider.AMPM_MARKERS[value];
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.AM_PM,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.AM_PM,
-                    value,
-                    Calendar.SHORT_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    "any-calendar",
-                    Calendar.AM_PM,
-                    value,
-                    Calendar.SHORT_FORMAT,
-                    Basque.LOCALE));
-        assertNull(provider.getDisplayName(
-                BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                Calendar.AM_PM,
-                value,
-                Calendar.SHORT_FORMAT,
-                Locale.ENGLISH));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
-     */
-    @ParameterizedTest
-    @ValueSource(ints = { Calendar.AM, Calendar.PM })
-    void testGetDisplayName_AmPm_Narrow(
-            final int value) {
-        final String expected = BasqueCalendarNameProvider.AMPM_MARKERS[value];
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.AM_PM,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                    Calendar.AM_PM,
-                    value,
-                    Calendar.NARROW_STANDALONE,
-                    Basque.LOCALE));
-        assertEquals(
-                expected,
-                provider.getDisplayName(
-                    "any-calendar",
-                    Calendar.AM_PM,
-                    value,
-                    Calendar.NARROW_FORMAT,
-                    Basque.LOCALE));
-        assertNull(provider.getDisplayName(
-                BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                Calendar.AM_PM,
-                value,
-                Calendar.NARROW_FORMAT,
-                Locale.ENGLISH));
-    }
-
-    /**
-     * Test for {@link BasqueCalendarNameProvider#getAvailableLocales()}.
-     */
-    @Test
-    void testAvailableLocales() {
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE));
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE_ES));
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE_FR));
-        assertFalse(provider.isSupportedLocale(Locale.FRENCH));
-        assertFalse(provider.isSupportedLocale(Locale.FRANCE));
-        assertFalse(provider.isSupportedLocale(new Locale("es")));
-        assertFalse(provider.isSupportedLocale(new Locale("es", "ES")));
+    @MethodSource("typeFieldStyle")
+    void testGetDisplayNameLatestCldr(
+            final String type,
+            final int field,
+            final int style) {
+        final Calendar calendar = new Calendar.Builder()
+                .setCalendarType(type)
+                .build();
+        Map<String, Integer> expected = calendar.getDisplayNames(field, style, Basque.LOCALE);
+        Map<String, Integer> result = provider.getDisplayNames(type, field, style, Basque.LOCALE);
+        assertEquals(expected, result);
+        expected = calendar.getDisplayNames(field, style, Basque.LOCALE_ES);
+        result = provider.getDisplayNames(type, field, style, Basque.LOCALE_ES);
+        assertEquals(expected, result);
+        expected = calendar.getDisplayNames(field, style, Basque.LOCALE_FR);
+        result = provider.getDisplayNames(type, field, style, Basque.LOCALE_FR);
+        assertEquals(expected, result);
     }
 
     static Stream<String> calendarTypes() {
-        return Stream.of(
-                BasqueCalendarNameProvider.GREGORIAN_CALENDAR,
-                BasqueCalendarNameProvider.BUDDHIST_CALENDAR,
-                BasqueCalendarNameProvider.JAPANESE_CALENDAR,
-                BasqueCalendarNameProvider.MINGUO_CALENDAR,
-                BasqueCalendarNameProvider.ISLAMIC_CALENDAR,
-                "unsupported");
+        return Calendar.getAvailableCalendarTypes().stream();
     }
 
     static Stream<Integer> calendarFields() {
@@ -1321,49 +239,55 @@ class BasqueCalendarNameProviderTest {
                 .boxed();
     }
 
-    static Stream<Arguments> eras() {
+    static Stream<Integer> eras() {
         return IntStream.range(0, 8)
-                .boxed()
-                .map(Arguments::of);
+                .boxed();
     }
 
-    static Stream<Arguments> months() {
-        return Stream.of(
-                Arguments.of(Calendar.JANUARY),
-                Arguments.of(Calendar.FEBRUARY),
-                Arguments.of(Calendar.MARCH),
-                Arguments.of(Calendar.APRIL),
-                Arguments.of(Calendar.MAY),
-                Arguments.of(Calendar.JUNE),
-                Arguments.of(Calendar.JULY),
-                Arguments.of(Calendar.AUGUST),
-                Arguments.of(Calendar.SEPTEMBER),
-                Arguments.of(Calendar.OCTOBER),
-                Arguments.of(Calendar.NOVEMBER),
-                Arguments.of(Calendar.DECEMBER),
-                Arguments.of(Calendar.UNDECIMBER)
-            );
+    static Stream<Integer> months() {
+        return IntStream.range(Calendar.JANUARY, Calendar.UNDECIMBER)
+                .boxed();
     }
 
-    static Stream<Arguments> weekdays() {
-        return Stream.of(
-                Arguments.of(0),
-                Arguments.of(Calendar.SUNDAY),
-                Arguments.of(Calendar.MONDAY),
-                Arguments.of(Calendar.TUESDAY),
-                Arguments.of(Calendar.WEDNESDAY),
-                Arguments.of(Calendar.THURSDAY),
-                Arguments.of(Calendar.FRIDAY),
-                Arguments.of(Calendar.SATURDAY)
-            );
+    static Stream<Integer> weekdays() {
+        return IntStream.range(Calendar.SUNDAY, Calendar.SATURDAY)
+                .boxed();
     }
 
-    static Stream<Locale> testLocales() {
-        return Stream.of(
-                Basque.LOCALE,
-                Basque.LOCALE_ES,
-                Basque.LOCALE_FR,
-                Locale.ENGLISH,
-                new Locale("es"));
+    static Stream<Arguments> typesStyles() {
+        return calendarTypes()
+                .flatMap(type -> calendarStyles().map(style -> Arguments.of(type, style)));
+    }
+
+    static Stream<Arguments> typesErasStyles() {
+        return calendarTypes()
+                .flatMap(type -> eras().map(era -> Arguments.of(type, era)))
+                .flatMap(prev -> calendarStyles().map(style -> Arguments.of(prev.get()[0], prev.get()[1], style)));
+    }
+
+    static Stream<Arguments> typesMonthsStyles() {
+        return calendarTypes()
+                .flatMap(type -> months().map(month -> Arguments.of(type, month)))
+                .flatMap(prev -> calendarStyles().map(style -> Arguments.of(prev.get()[0], prev.get()[1], style)));
+    }
+
+    static Stream<Arguments> typesWeekdaysStyles() {
+        return calendarTypes()
+                .flatMap(type -> weekdays().map(weekday -> Arguments.of(type, weekday)))
+                .flatMap(prev -> calendarStyles().map(style -> Arguments.of(prev.get()[0], prev.get()[1], style)));
+    }
+
+    static Stream<Arguments> typesAmPmStyles() {
+        return calendarTypes()
+                .flatMap(type -> Stream.of(
+                        Arguments.of(type, Calendar.AM),
+                        Arguments.of(type, Calendar.PM)))
+                .flatMap(prev -> calendarStyles().map(style -> Arguments.of(prev.get()[0], prev.get()[1], style)));
+    }
+
+    static Stream<Arguments> typeFieldStyle() {
+        return calendarTypes()
+                .flatMap(type -> calendarFields().map(field -> Arguments.of(type, field)))
+                .flatMap(prev -> calendarStyles().map(style -> Arguments.of(prev.get()[0], prev.get()[1], style)));
     }
 }

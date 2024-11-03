@@ -24,7 +24,6 @@ package dev.orne.i18n.spi.eu;
 
 import java.text.DateFormatSymbols;
 import java.text.spi.DateFormatSymbolsProvider;
-import java.util.Arrays;
 import java.util.Locale;
 
 import javax.validation.constraints.NotNull;
@@ -39,35 +38,56 @@ import javax.validation.constraints.NotNull;
 public class BasqueDateFormatSymbolsProvider
 extends DateFormatSymbolsProvider {
 
+    /** The basque date format symbols template. */
+    private final DateFormatSymbols symbols;
+    /** The basque (ES) date format symbols template. */
+    private final DateFormatSymbols symbolsEs;
+    /** The basque (FR) date format symbols template. */
+    private final DateFormatSymbols symbolsFr;
+
+    /**
+     * Creates a new instance.
+     */
+    public BasqueDateFormatSymbolsProvider() {
+        this.symbols = new DateFormatSymbols(Basque.LOCALE);
+        this.symbols.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);
+        this.symbols.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);
+        this.symbols.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);
+        this.symbols.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);
+        this.symbols.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);
+        this.symbols.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);
+        this.symbols.setZoneStrings(BasqueTimeZoneNameProvider.getNames());
+        this.symbolsEs = new DateFormatSymbols(Basque.LOCALE_ES);
+        this.symbolsEs.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);
+        this.symbolsEs.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);
+        this.symbolsEs.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);
+        this.symbolsEs.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);
+        this.symbolsEs.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);
+        this.symbolsEs.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);
+        this.symbolsEs.setZoneStrings(BasqueTimeZoneNameProvider.getNames());
+        this.symbolsFr = new DateFormatSymbols(Basque.LOCALE_FR);
+        this.symbolsFr.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);
+        this.symbolsFr.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);
+        this.symbolsFr.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);
+        this.symbolsFr.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);
+        this.symbolsFr.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);
+        this.symbolsFr.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);
+        this.symbolsFr.setZoneStrings(BasqueTimeZoneNameProvider.getNames());
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-	public DateFormatSymbols getInstance(Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            final DateFormatSymbols symbols = new DateFormatSymbols(Basque.LOCALE);
-            symbols.setMonths(Arrays.copyOf(
-                    BasqueCalendarNameProvider.MONTHS_LONG,
-                    BasqueCalendarNameProvider.MONTHS_LONG.length));
-            symbols.setShortMonths(Arrays.copyOf(
-                    BasqueCalendarNameProvider.MONTHS_SHORT,
-                    BasqueCalendarNameProvider.MONTHS_SHORT.length));
-            symbols.setWeekdays(Arrays.copyOf(
-                    BasqueCalendarNameProvider.WEEKDAYS_LONG,
-                    BasqueCalendarNameProvider.WEEKDAYS_LONG.length));
-            symbols.setShortWeekdays(Arrays.copyOf(
-                    BasqueCalendarNameProvider.WEEKDAYS_SHORT,
-                    BasqueCalendarNameProvider.WEEKDAYS_SHORT.length));
-            symbols.setAmPmStrings(Arrays.copyOf(
-                    BasqueCalendarNameProvider.AMPM_MARKERS,
-                    BasqueCalendarNameProvider.AMPM_MARKERS.length));
-            symbols.setEras(Arrays.copyOf(
-                    BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT,
-                    BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT.length));
-            symbols.setZoneStrings(null);
-            return symbols;
+	public DateFormatSymbols getInstance(
+	        final Locale locale) {
+        if (Basque.LOCALE_ES.equals(locale)) {
+            return (DateFormatSymbols) symbolsEs.clone();
+        } else if (Basque.LOCALE_ES.equals(locale)) {
+            return (DateFormatSymbols) symbolsFr.clone();
+        } else {
+            return (DateFormatSymbols) symbols.clone();
         }
-        return null;
 	}
 
     /**

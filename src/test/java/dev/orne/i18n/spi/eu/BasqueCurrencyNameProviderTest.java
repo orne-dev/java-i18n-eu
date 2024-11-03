@@ -28,18 +28,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import javax.validation.constraints.NotNull;
 
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.condition.DisabledForJreRange;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Unit tests for {@code BasqueCurrencyNameProvider}.
@@ -50,100 +50,70 @@ import org.junit.jupiter.params.provider.MethodSource;
  * @see BasqueCurrencyNameProvider
  */
 @Tag("ut")
-class BasqueCurrencyNameProviderTest {
+class BasqueCurrencyNameProviderTest
+extends AbstractBasqueProviderTest<BasqueCurrencyNameProvider> {
 
-    private static final Locale SPANISH = new Locale("es");
-
-    /** The provider instance to test. */
-    private final BasqueCurrencyNameProvider provider = new BasqueCurrencyNameProvider();
+    private static final Logger LOG = LoggerFactory.getLogger(BasqueCurrencyNameProviderTest.class);
 
     /**
-     * Test for basque translation availability.
+     * Creates a new instance.
+     */
+    BasqueCurrencyNameProviderTest() {
+        super(new BasqueCurrencyNameProvider());
+    }
+
+    /**
+     * Test for {@link BasqueCurrencyNameProvider#getSymbol(String, Locale)}.
      */
     @ParameterizedTest
     @MethodSource("currencyCodes")
-    void testTranslationsCoverage(
+    void testGetSymbol(
             final @NotNull Currency currency) {
         assertNotNull(provider.getSymbol(currency.getCurrencyCode(), Basque.LOCALE));
+        assertNotNull(provider.getSymbol(currency.getCurrencyCode(), Basque.LOCALE_ES));
+        assertNotNull(provider.getSymbol(currency.getCurrencyCode(), Basque.LOCALE_FR));
+    }
+
+    /**
+     * Test for {@link BasqueCurrencyNameProvider#getDisplayName(String, Locale)}.
+     */
+    @ParameterizedTest
+    @MethodSource("currencyCodes")
+    void testGetDisplayName(
+            final @NotNull Currency currency) {
         assertNotNull(provider.getDisplayName(currency.getCurrencyCode(), Basque.LOCALE));
+        assertNotNull(provider.getDisplayName(currency.getCurrencyCode(), Basque.LOCALE_ES));
+        assertNotNull(provider.getDisplayName(currency.getCurrencyCode(), Basque.LOCALE_FR));
     }
 
     /**
      * Test for {@link BasqueCurrencyNameProvider#getSymbol(String, Locale)}.
      */
-    @DisabledForJreRange(max = JRE.JAVA_16)
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
     @ParameterizedTest
     @MethodSource("currencyCodes")
-    void testSymbol(
+    void testSymbolLatestCldr(
             final @NotNull Currency currency) {
-        String expectedSp = currency.getSymbol(SPANISH);
-        String expectedEn = currency.getSymbol(Locale.ENGLISH);
-        assertNull(provider.getSymbol(currency.getCurrencyCode(), Locale.ENGLISH));
+        String expected = currency.getSymbol(Basque.LOCALE);
         String result = provider.getSymbol(currency.getCurrencyCode(), Basque.LOCALE);
-        assertTrue(
-                expectedSp.equals(result) || expectedEn.equals(result),
-                () -> String.format("Unexpected symbol for currency '%s'", currency.getCurrencyCode()));
+        LOG.debug("{}{}={}", currency.getCurrencyCode(), BasqueCurrencyNameProvider.SYMBOL_SUFFIX, expected);
+        assertEquals(expected, result);
     }
 
     /**
      * Test for {@link BasqueCurrencyNameProvider#getDisplayName(String, Locale)}.
      */
-    @DisabledForJreRange(max = JRE.JAVA_16)
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
     @ParameterizedTest
     @MethodSource("currencyCodes")
-    void testDisplayName(
+    void testDisplayNameLatestCldr(
             final @NotNull Currency currency) {
-        String notExpected = currency.getDisplayName(SPANISH);
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> provider.getDisplayName(currency.getCurrencyCode(), Locale.ENGLISH));
+        String expected = currency.getDisplayName(Basque.LOCALE);
         String result = provider.getDisplayName(currency.getCurrencyCode(), Basque.LOCALE);
-        assertNotEquals(
-                notExpected,
-                result == null ? notExpected : result,
-                () -> String.format("Unexpected name for currency '%s'", currency.getCurrencyCode()));
-    }
-
-    /**
-     * Test for {@link BasqueCurrencyNameProvider#getSymbol(String, Locale)}.
-     */
-    @EnabledForJreRange(min = JRE.JAVA_11, max = JRE.JAVA_11,
-            disabledReason = "JRE 11 only test")
-    @ParameterizedTest
-    @MethodSource("currencyCodes")
-    void testSymbolJdk11(
-            final @NotNull Currency currency) {
-        final String currencyCode = currency.getCurrencyCode();
-        final String expectedSp = currency.getSymbol(SPANISH);
-        final String expectedEn = currency.getSymbol(Locale.ENGLISH);
-        assertNull(provider.getSymbol(currencyCode, Locale.ENGLISH));
-        final String result = provider.getSymbol(currencyCode, Basque.LOCALE);
-        assertTrue(
-                Objects.equals(provider.getCurrencies().getProperty(currencyCode + ".symbol"), result)
-                    || expectedSp.equals(result)
-                    || expectedEn.equals(result),
-                () -> String.format("Unexpected symbol for currency '%s'", currencyCode));
-    }
-
-    /**
-     * Test for {@link BasqueCurrencyNameProvider#getDisplayName(String, Locale)}.
-     */
-    @EnabledForJreRange(min = JRE.JAVA_11, max = JRE.JAVA_11,
-            disabledReason = "JRE 11 only test")
-    @ParameterizedTest
-    @MethodSource("currencyCodes")
-    void testDisplayNameJdk11(
-            final @NotNull Currency currency) {
-        final String currencyCode = currency.getCurrencyCode();
-        final String notExpected = currency.getDisplayName(SPANISH);
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> provider.getDisplayName(currencyCode, Locale.ENGLISH));
-        final String result = provider.getDisplayName(currencyCode, Basque.LOCALE);
-        assertNotEquals(
-                notExpected,
-                result == null ? notExpected : result,
-                () -> String.format("Unexpected name for currency '%s'", currencyCode));
+        LOG.debug("{}={}", currency.getCurrencyCode(), expected);
+        assertEquals(expected, result);
     }
 
     /**

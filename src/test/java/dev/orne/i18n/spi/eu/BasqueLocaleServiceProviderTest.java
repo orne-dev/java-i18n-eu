@@ -22,36 +22,24 @@ package dev.orne.i18n.spi.eu;
  * #L%
  */
 
-import java.text.Collator;
-import java.text.spi.CollatorProvider;
-import java.util.Locale;
-
-import javax.validation.constraints.NotNull;
+import org.junit.jupiter.api.Tag;
 
 /**
- * Basque collator provider.
+ * Unit tests for {@code BasqueLocaleServiceProvider}.
  * 
  * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
- * @version 1.0, 2024-10
+ * @version 1.0, 2024-11
  * @since 1.0
+ * @see BasqueLocaleServiceProvider
  */
-public class BasqueCollatorProvider
-extends CollatorProvider {
+@Tag("ut")
+class BasqueLocaleServiceProviderTest
+extends AbstractBasqueProviderTest<BasqueLocaleServiceProvider> {
 
     /**
-     * {@inheritDoc}
+     * Creates a new instance.
      */
-    @Override
-    public Collator getInstance(
-            final @NotNull Locale locale) {
-        return Collator.getInstance(Locale.ENGLISH);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Locale[] getAvailableLocales() {
-        return BasqueLocaleServiceProvider.LOCALES;
+    BasqueLocaleServiceProviderTest() {
+        super(new BasqueLocaleServiceProvider());
     }
 }

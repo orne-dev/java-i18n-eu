@@ -54,41 +54,60 @@ extends CalendarNameProvider {
 
     /** Long Gregorian calendar era names. */
     static final String[] GREGORIAN_ERAS_LONG = new String[] {
-            "Kristo aurreko",
-            "Kristo ondoko"
+            "K.a.",
+            "K.o."
+    };
+    /** Standalone long Gregorian calendar era names. */
+    static final String[] GREGORIAN_ERAS_LONG_ALONE = new String[] {
+            "K.a.",
+            "Kristo ondoren"
     };
     /** Short Gregorian calendar era names. */
     static final String[] GREGORIAN_ERAS_SHORT = new String[] {
             "K.a.",
             "K.o."
     };
+    /** Short Gregorian calendar era names. */
+    static final String[] GREGORIAN_ERAS_NARROW = new String[] {
+            "a",
+            "o"
+    };
     /** Long Buddhist calendar era names. */
     static final String[] BUDDHIST_ERAS_LONG = new String[] {
-            "Buda aurreko",
-            "Buda ondoko"
+            "BC",
+            "BG"
     };
     /** Short Buddhist calendar era names. */
     static final String[] BUDDHIST_ERAS_SHORT = new String[] {
-            "B.a.",
-            "B.o."
+            "BC",
+            "BG"
     };
     /** Long Japanese calendar era names. */
     static final String[] JAPANESE_ERAS_LONG = new String[] {
-            "Seireki aurreko",
-            "Meiji aroko",
-            "Taisho aroko",
-            "Showa aroko",
-            "Heisei aroko",
-            "Reiwa aroko",
+            "Kristo ondoren",
+            "Meiji",
+            "Taish\u014D",
+            "Sh\u014Dwa",
+            "Heisei",
+            "Reiwa"
     };
     /** Short Japanese calendar era names. */
     static final String[] JAPANESE_ERAS_SHORT = new String[] {
-            "S.a.",
-            "M.u.",
-            "T.u.",
-            "S.u.",
-            "H.u.",
-            "R.u."
+            "CE",
+            "Meiji",
+            "Taish\u014D",
+            "Sh\u014Dwa",
+            "Heisei",
+            "Reiwa"
+    };
+    /** Narrow Japanese calendar era names. */
+    static final String[] JAPANESE_ERAS_NARROW = new String[] {
+            "CE",
+            "M",
+            "T",
+            "S",
+            "H",
+            "R"
     };
     /** Long Republic of China calendar era names. */
     static final String[] MINGUO_ERAS_LONG = new String[] {
@@ -112,87 +131,86 @@ extends CalendarNameProvider {
     };
     /** Long month names. */
     static final String[] MONTHS_LONG = new String[] {
-            "Urtarrila",
-            "Otsaila",
-            "Martxoa",
-            "Apirila",
-            "Maiatza",
-            "Ekaina",
-            "Uztaila",
-            "Abuztua",
-            "Iraila",
-            "Urria",
-            "Azaroa",
-            "Abendua"
+            "urtarrila",
+            "otsaila",
+            "martxoa",
+            "apirila",
+            "maiatza",
+            "ekaina",
+            "uztaila",
+            "abuztua",
+            "iraila",
+            "urria",
+            "azaroa",
+            "abendua",
+            ""
     };
     /** Short month names. */
     static final String[] MONTHS_SHORT = new String[] {
-            "Urt",
-            "Ots",
-            "Mar",
-            "Api",
-            "Mai",
-            "Eka",
-            "Uzt",
-            "Abu",
-            "Ira",
-            "Urr",
-            "Aza",
-            "Abe"
+            "urt.",
+            "ots.",
+            "mar.",
+            "api.",
+            "mai.",
+            "eka.",
+            "uzt.",
+            "abu.",
+            "ira.",
+            "urr.",
+            "aza.",
+            "abe.",
+            ""
     };
     /** Narrow month names. */
     static final String[] MONTHS_NARROW = new String[] {
-            "U",
-            "O",
-            "M",
-            "A",
-            "M",
-            "E",
-            "U",
-            "A",
-            "I",
-            "U",
-            "A",
-            "A"
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12"
     };
 
     /** Long weekday names. */
     static final String[] WEEKDAYS_LONG = new String[] {
-            null,
-            "Igandea",
-            "Astelehena",
-            "Asteartea",
-            "Asteazkena",
-            "Osteguna",
-            "Ostirala",
-            "Larunbata"
+            "",
+            "igandea",
+            "astelehena",
+            "asteartea",
+            "asteazkena",
+            "osteguna",
+            "ostirala",
+            "larunbata"
     };
     /** Short weekday names. */
     static final String[] WEEKDAYS_SHORT = new String[] {
-            null,
-            "Ig.",
-            "Al.",
-            "As.",
-            "Az.",
-            "Og.",
-            "Or.",
-            "Lr."
+            "",
+            "ig.",
+            "al.",
+            "ar.",
+            "az.",
+            "og.",
+            "or.",
+            "lr."
     };
     /** Narrow weekday names. */
     static final String[] WEEKDAYS_NARROW = new String[] {
-            null,
-            "I",
-            "A",
-            "A",
-            "A",
-            "O",
-            "O",
-            "L"
     };
     /** AM-PM markers. */
     static final String[] AMPM_MARKERS = new String[] {
             "AM",
             "PM"
+    };
+    /** AM-PM markers. */
+    static final String[] AMPM_MARKERS_NARROW = new String[] {
+            "g",
+            "a"
     };
 
     /**
@@ -204,15 +222,28 @@ extends CalendarNameProvider {
             final int field,
             final int style,
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            final IntFunction<String[]> fnc = getFieldNamesFunction(calendarType, field);
-            if (style == Calendar.ALL_STYLES) {
-                return mergeNames(fnc, Calendar.SHORT_FORMAT, Calendar.LONG_FORMAT);
+        final IntFunction<String[]> fnc = getFieldNamesFunction(calendarType, field);
+        if (style == Calendar.ALL_STYLES) {
+            if (field == Calendar.MONTH) {
+                return mergeNames(
+                        fnc,
+                        Calendar.SHORT_FORMAT,
+                        Calendar.SHORT_STANDALONE,
+                        Calendar.LONG_FORMAT,
+                        Calendar.LONG_STANDALONE);
             } else {
-                return mergeNames(fnc, style);
+                return mergeNames(
+                        fnc,
+                        Calendar.SHORT_FORMAT,
+                        Calendar.SHORT_STANDALONE,
+                        Calendar.LONG_FORMAT,
+                        Calendar.LONG_STANDALONE,
+                        Calendar.NARROW_FORMAT,
+                        Calendar.NARROW_STANDALONE);
             }
+        } else {
+            return mergeNames(fnc, style);
         }
-        return null;
     }
 
     /**
@@ -225,15 +256,12 @@ extends CalendarNameProvider {
             final int value,
             final int style,
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())) {
-            final IntFunction<String[]> fnc = getFieldNamesFunction(calendarType, field);
-            if (fnc == null) {
-                return null;
-            } else {
-                return getValueName(fnc, style, value);
-            }
+        final IntFunction<String[]> fnc = getFieldNamesFunction(calendarType, field);
+        if (fnc == null) {
+            return null;
+        } else {
+            return getValueName(fnc, style, value);
         }
-        return null;
     }
 
     /**
@@ -305,6 +333,7 @@ extends CalendarNameProvider {
                 result.put(names[i], i);
             }
         }
+        result.remove("");
         if (result.isEmpty()) {
             return null;
         } else {
@@ -346,11 +375,13 @@ extends CalendarNameProvider {
         switch(style) {
             case Calendar.SHORT_FORMAT:
             case Calendar.SHORT_STANDALONE:
+                return GREGORIAN_ERAS_SHORT;
             case Calendar.NARROW_FORMAT:
             case Calendar.NARROW_STANDALONE:
-                return GREGORIAN_ERAS_SHORT;
-            case Calendar.LONG_FORMAT:
+                return GREGORIAN_ERAS_NARROW;
             case Calendar.LONG_STANDALONE:
+                return GREGORIAN_ERAS_LONG_ALONE;
+            case Calendar.LONG_FORMAT:
             default:
                 return GREGORIAN_ERAS_LONG;
         }
@@ -388,9 +419,10 @@ extends CalendarNameProvider {
         switch(style) {
             case Calendar.SHORT_FORMAT:
             case Calendar.SHORT_STANDALONE:
+                return JAPANESE_ERAS_SHORT;
             case Calendar.NARROW_FORMAT:
             case Calendar.NARROW_STANDALONE:
-                return JAPANESE_ERAS_SHORT;
+                return JAPANESE_ERAS_NARROW;
             case Calendar.LONG_FORMAT:
             case Calendar.LONG_STANDALONE:
             default:
@@ -492,6 +524,16 @@ extends CalendarNameProvider {
      */
     static @NotNull String[] getAmPmNames(
             final int style) {
-        return AMPM_MARKERS;
+        switch(style) {
+            case Calendar.NARROW_FORMAT:
+            case Calendar.NARROW_STANDALONE:
+                return AMPM_MARKERS_NARROW;
+            case Calendar.SHORT_FORMAT:
+            case Calendar.SHORT_STANDALONE:
+            case Calendar.LONG_FORMAT:
+            case Calendar.LONG_STANDALONE:
+            default:
+                return AMPM_MARKERS;
+        }
     }
 }

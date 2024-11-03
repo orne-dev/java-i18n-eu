@@ -29,6 +29,8 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 /**
  * Unit tests for {@code BasqueBreakIteratorProvider}.
@@ -39,21 +41,14 @@ import org.junit.jupiter.api.Test;
  * @see BasqueBreakIteratorProvider
  */
 @Tag("ut")
-class BasqueBreakIteratorProviderTest {
-
-    private static final Locale SPANISH = new Locale("es");
-
-    /** The provider instance to test. */
-    private final BasqueBreakIteratorProvider provider = new BasqueBreakIteratorProvider();
+class BasqueBreakIteratorProviderTest
+extends AbstractBasqueProviderTest<BasqueBreakIteratorProvider> {
 
     /**
-     * Test for {@link BasqueBreakIteratorProvider#getAvailableLocales()}.
+     * Creates a new instance.
      */
-    @Test
-    void testAvailableLocales() {
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE));
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE_ES));
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE_FR));
+    BasqueBreakIteratorProviderTest() {
+        super(new BasqueBreakIteratorProvider());
     }
 
     /**
@@ -61,9 +56,9 @@ class BasqueBreakIteratorProviderTest {
      */
     @Test
     void testCharacterInstance() {
-        final BreakIterator result = provider.getCharacterInstance(Basque.LOCALE);
-        assertEquals(BreakIterator.getCharacterInstance(SPANISH), result);
-        assertNull(provider.getCharacterInstance(SPANISH));
+        assertNotNull(provider.getCharacterInstance(Basque.LOCALE));
+        assertNotNull(provider.getCharacterInstance(Basque.LOCALE_ES));
+        assertNotNull(provider.getCharacterInstance(Basque.LOCALE_FR));
     }
 
     /**
@@ -71,19 +66,19 @@ class BasqueBreakIteratorProviderTest {
      */
     @Test
     void testWordInstance() {
-        final BreakIterator result = provider.getWordInstance(Basque.LOCALE);
-        assertEquals(BreakIterator.getWordInstance(SPANISH), result);
-        assertNull(provider.getWordInstance(SPANISH));
-    }
+        assertNotNull(provider.getWordInstance(Basque.LOCALE));
+        assertNotNull(provider.getWordInstance(Basque.LOCALE_ES));
+        assertNotNull(provider.getWordInstance(Basque.LOCALE_FR));
+   }
 
     /**
      * Test for {@link BasqueBreakIteratorProvider#getLineInstance(Locale)}.
      */
     @Test
     void testLineInstance() {
-        final BreakIterator result = provider.getLineInstance(Basque.LOCALE);
-        assertEquals(BreakIterator.getLineInstance(SPANISH), result);
-        assertNull(provider.getLineInstance(SPANISH));
+        assertNotNull(provider.getLineInstance(Basque.LOCALE));
+        assertNotNull(provider.getLineInstance(Basque.LOCALE_ES));
+        assertNotNull(provider.getLineInstance(Basque.LOCALE_FR));
     }
 
     /**
@@ -91,8 +86,52 @@ class BasqueBreakIteratorProviderTest {
      */
     @Test
     void testSentenceInstance() {
+        assertNotNull(provider.getSentenceInstance(Basque.LOCALE));
+        assertNotNull(provider.getSentenceInstance(Basque.LOCALE_ES));
+        assertNotNull(provider.getSentenceInstance(Basque.LOCALE_FR));
+    }
+
+    /**
+     * Test for {@link BasqueBreakIteratorProvider#getCharacterInstance(Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
+    @Test
+    void testCharacterInstanceLatestJre() {
+        final BreakIterator result = provider.getCharacterInstance(Basque.LOCALE);
+        assertEquals(BreakIterator.getCharacterInstance(Basque.LOCALE), result);
+    }
+
+    /**
+     * Test for {@link BasqueBreakIteratorProvider#getWordInstance(Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
+    @Test
+    void testWordInstanceLatestJre() {
+        final BreakIterator result = provider.getWordInstance(Basque.LOCALE);
+        assertEquals(BreakIterator.getWordInstance(Basque.LOCALE), result);
+    }
+
+    /**
+     * Test for {@link BasqueBreakIteratorProvider#getLineInstance(Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
+    @Test
+    void testLineInstanceLatestJre() {
+        final BreakIterator result = provider.getLineInstance(Basque.LOCALE);
+        assertEquals(BreakIterator.getLineInstance(Basque.LOCALE), result);
+    }
+
+    /**
+     * Test for {@link BasqueBreakIteratorProvider#getSentenceInstance(Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
+    @Test
+    void testSentenceInstanceLatestJre() {
         final BreakIterator result = provider.getSentenceInstance(Basque.LOCALE);
-        assertEquals(BreakIterator.getSentenceInstance(SPANISH), result);
-        assertNull(provider.getSentenceInstance(SPANISH));
+        assertEquals(BreakIterator.getSentenceInstance(Basque.LOCALE), result);
     }
 }

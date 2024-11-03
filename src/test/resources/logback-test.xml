@@ -38,7 +38,8 @@
   <logger name="dev.orne.i18n.spi.eu" level="OFF" />
   <logger name="dev.orne.i18n.spi.eu.BasqueCalendarNameProviderTest" level="OFF" />
   <logger name="dev.orne.i18n.spi.eu.BasqueCurrencyNameProviderTest" level="OFF" />
+  <logger name="dev.orne.i18n.spi.eu.BasqueDateFormatSymbolsProviderTest" level="OFF" />
+  <logger name="dev.orne.i18n.spi.eu.BasqueLocaleNameProviderTest" level="OFF" />
   <logger name="dev.orne.i18n.spi.eu.BasqueTimeZoneNameProviderTest" level="OFF" />
-  <logger name="dev.orne.i18n.spi.eu.EnglishCurrencyNamesTest" level="OFF" />
 
 </configuration>

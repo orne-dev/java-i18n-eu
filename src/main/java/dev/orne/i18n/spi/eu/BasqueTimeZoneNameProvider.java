@@ -24,18 +24,13 @@ package dev.orne.i18n.spi.eu;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.text.DateFormatSymbols;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.zone.ZoneRulesException;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.TimeZone;
-import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.spi.TimeZoneNameProvider;
@@ -55,23 +50,31 @@ extends TimeZoneNameProvider {
     /** The logger of the class. */
     private static final Logger LOG = Logger.getLogger(BasqueTimeZoneNameProvider.class.getName());
 
-    /** Instant in December. */
-    private static final Instant DECEMBER_INSTANT = LocalDateTime.now()
-            .with(Month.DECEMBER)
-            .toInstant(ZoneOffset.UTC);
-    /** Instant in August. */
-    private static final Instant AUGUST_INSTANT = LocalDateTime.now()
-            .with(Month.AUGUST)
-            .toInstant(ZoneOffset.UTC);
-    /** Data time formatter to extract zone display name. */
-    private static final DateTimeFormatter TO_LONG = DateTimeFormatter.ofPattern(
-            "zzzz",
-            Locale.ENGLISH);
+    /** Time zone standard name property suffix. */
+    static final String STANDARD_SUFFIX = ".std";
+    /** Time zone daylight saving time name property suffix. */
+    static final String DAYLIGHT_SUFFIX = ".dst";
+    /** Time zone long name property suffix. */
+    static final String LONG_SUFFIX = ".long";
 
-    /** The time zone names translations. */
-    private Properties translations;
-    /** The time zone names translations. */
-    private final WeakHashMap<String, Optional<String>> names = new WeakHashMap<>();
+    /** The time zone names in {@code DateFormatSymbols} format. */
+    private static String[][] names;
+    /** The time zone aliases. */
+    private final HashMap<String, String> aliases = new HashMap<>();
+    /** The time zone names by zone ID. */
+    private final HashMap<String, String[]> index = new HashMap<>();
+
+    /**
+     * Creates a new instance.
+     */
+    public BasqueTimeZoneNameProvider() {
+        super();
+        for (final String[] zone : getNames()) {
+            index.put(zone[0], zone);
+        }
+        aliases.put("GMT0", "GMT");
+        aliases.put("Etc/GMT0", "GMT");
+    }
 
     /**
      * {@inheritDoc}
@@ -82,15 +85,39 @@ extends TimeZoneNameProvider {
             final boolean daylight,
             final int style,
             final @NotNull Locale locale) {
-        if (Basque.LANGUAGE.equals(locale.getLanguage())
-                && style == TimeZone.LONG) {
-            final String cacheKey = id + (daylight ? "-DST" : "");
-            return this.names.computeIfAbsent(cacheKey, k -> Optional
-                    .ofNullable(getTranslations().getProperty(
-                        getTranslationProperty(id, daylight))))
-                    .orElse(null);
+        final String[] zone = getNames(id);
+        if (zone == null) {
+            return null;
         }
-        return null;
+        if (daylight) {
+            if (style == TimeZone.LONG) {
+                return zone[3];
+            } else {
+                return zone[4];
+            }
+        } else {
+            if (style == TimeZone.LONG) {
+                return zone[1];
+            } else {
+                return zone[2];
+            }
+        }
+    }
+
+    @Override
+    public String getGenericDisplayName(
+            final String id,
+            final int style,
+            final Locale locale) {
+        final String[] zone = getNames(id);
+        if (zone == null || zone.length < 7) {
+            return null;
+        }
+        if (style == TimeZone.LONG) {
+            return zone[5];
+        } else {
+            return zone[6];
+        }
     }
 
     /**
@@ -102,66 +129,54 @@ extends TimeZoneNameProvider {
     }
 
     /**
-     * Returns the english-basque time zone names translations.
+     * Returns The time zone names in {@code DateFormatSymbols} format.
      * 
-     * @return The english-basque time zone names translations.
+     * @return The time zone names in {@code DateFormatSymbols} format.
+     * @see DateFormatSymbols#getZoneStrings()
      */
-    synchronized @NotNull Properties getTranslations() {
-        if (translations == null) {
-            translations = new Properties();
+    static synchronized @NotNull String[][] getNames() {
+        if (names == null) {
+            final Properties translations = new Properties();
             try (InputStream is = BasqueLocaleNameProvider.class.getResourceAsStream("timezones.properties")) {
                 translations.load(is);
             } catch (final IOException e) {
                 LOG.log(Level.SEVERE, "Error loading basque time zones names", e);
             }
+            names = ((DateFormatSymbols) DateFormatSymbols.getInstance(Locale.ENGLISH).clone())
+                    .getZoneStrings();
+            for (int i = 0; i < names.length; i++) {
+                final String[] zone = names[i];
+                zone[1] = translations.getProperty(zone[0] + STANDARD_SUFFIX + LONG_SUFFIX, zone[1]);
+                zone[2] = translations.getProperty(zone[0] + STANDARD_SUFFIX, zone[2]);
+                zone[3] = translations.getProperty(zone[0] + DAYLIGHT_SUFFIX + LONG_SUFFIX, zone[3]);
+                zone[4] = translations.getProperty(zone[0] + DAYLIGHT_SUFFIX, zone[4]);
+                if (zone.length > 5) {
+                    zone[5] = translations.getProperty(zone[0] + LONG_SUFFIX, zone[5]);
+                }
+                if (zone.length > 6) {
+                    zone[6] = translations.getProperty(zone[0], zone[6]);
+                }
+            }
         }
-        return translations;
+        return names;
     }
 
     /**
-     * Retrieves the specified time zone long name in English.
+     * Retrieves the time zone names for the specified ID, trying 
      * 
-     * @param zoneId The time zone ID.
-     * @param daylight If the name must be for daylight saving time.
-     * @return The time zone long name.
+     * @param id The time zone ID.
+     * @return The time zone names in {@code DateFormatSymbols} format, if found.
      */
-    static @NotNull String getTranslationProperty(
-            final @NotNull String zoneId,
-            final boolean daylight) {
-        return getEnglishName(zoneId, daylight).replace(" ", "_");
-    }
-
-    /**
-     * Retrieves the specified time zone long name in English.
-     * 
-     * @param zoneId The time zone ID.
-     * @param daylight If the name must be for daylight saving time.
-     * @return The time zone long name.
-     */
-    static @NotNull String getEnglishName(
-            final @NotNull String zoneId,
-            final boolean daylight) {
-        return getReferenceTime(zoneId, daylight).format(TO_LONG);
-    }
-
-    /**
-     * Computes a instant with the specified daylight saving time mode
-     * for the specified time zone.
-     * 
-     * @param zoneId The time zone ID.
-     * @param daylight If the instant must be for daylight saving time.
-     * @return The time instant.
-     */
-    static @NotNull ZonedDateTime getReferenceTime(
-            final @NotNull String zoneId,
-            final boolean daylight) {
-        final ZoneId zone = ZoneId.of(zoneId);
-        final ZonedDateTime time;
-        if (ZoneId.of(zoneId).getRules().isDaylightSavings(DECEMBER_INSTANT) == daylight) {
-            time = ZonedDateTime.ofInstant(DECEMBER_INSTANT, zone);
-        } else {
-            time = ZonedDateTime.ofInstant(AUGUST_INSTANT, zone);
+    private String[] getNames(
+            final @NotNull String id) {
+        String[] zone = this.index.get(this.aliases.getOrDefault(id, id));
+        if (zone == null) {
+            try {
+                zone = this.index.get(ZoneId.of(id).normalized().getId());
+            } catch (final ZoneRulesException ignore) {
+                // Ignore
+            }
         }
-        return time;
+        return zone;
     }
 }

@@ -29,6 +29,8 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 /**
  * Unit tests for {@code BasqueCalendarDataProvider}.
@@ -39,17 +41,23 @@ import org.junit.jupiter.api.Test;
  * @see BasqueCalendarDataProvider
  */
 @Tag("ut")
-class BasqueCalendarDataProviderTest {
+class BasqueCalendarDataProviderTest
+extends AbstractBasqueProviderTest<BasqueCalendarDataProvider> {
 
-    /** The provider instance to test. */
-    private final BasqueCalendarDataProvider provider = new BasqueCalendarDataProvider();
+    /**
+     * Creates a new instance.
+     */
+    BasqueCalendarDataProviderTest() {
+        super(new BasqueCalendarDataProvider());
+    }
 
     /**
      * Test for {@link BasqueCalendarDataProvider#getFirstDayOfWeek(Locale)}.
      */
     @Test
     void testGetFirstDayOfWeek() {
-        assertEquals(Calendar.MONDAY, provider.getFirstDayOfWeek(Basque.LOCALE));
+        assertEquals(Calendar.MONDAY, provider.getFirstDayOfWeek(Basque.LOCALE_ES));
+        assertEquals(Calendar.MONDAY, provider.getFirstDayOfWeek(Basque.LOCALE_FR));
     }
 
     /**
@@ -57,20 +65,44 @@ class BasqueCalendarDataProviderTest {
      */
     @Test
     void testGetMinimalDaysInFirstWeek() {
-        assertEquals(0, provider.getMinimalDaysInFirstWeek(Basque.LOCALE));
+        assertEquals(4, provider.getMinimalDaysInFirstWeek(Basque.LOCALE_ES));
+        assertEquals(4, provider.getMinimalDaysInFirstWeek(Basque.LOCALE_FR));
+        assertEquals(1, provider.getMinimalDaysInFirstWeek(Basque.LOCALE));
     }
 
     /**
-     * Test for {@link BasqueCalendarDataProvider#getAvailableLocales()}.
+     * Test for {@link BasqueCalendarDataProvider#getFirstDayOfWeek(Locale)}.
      */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
     @Test
-    void testAvailableLocales() {
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE));
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE_ES));
-        assertTrue(provider.isSupportedLocale(Basque.LOCALE_FR));
-        assertFalse(provider.isSupportedLocale(Locale.FRENCH));
-        assertFalse(provider.isSupportedLocale(Locale.FRANCE));
-        assertFalse(provider.isSupportedLocale(new Locale("es")));
-        assertFalse(provider.isSupportedLocale(new Locale("es", "ES")));
+    void testGetFirstDayOfWeekLatestCldr() {
+        assertEquals(
+                Calendar.getInstance(Basque.LOCALE_ES).getFirstDayOfWeek(),
+                provider.getFirstDayOfWeek(Basque.LOCALE_ES));
+        assertEquals(
+                Calendar.getInstance(Basque.LOCALE_FR).getFirstDayOfWeek(),
+                provider.getFirstDayOfWeek(Basque.LOCALE_FR));
+        assertEquals(
+                Calendar.getInstance(Basque.LOCALE).getFirstDayOfWeek(),
+                provider.getFirstDayOfWeek(Basque.LOCALE));
+    }
+
+    /**
+     * Test for {@link BasqueCalendarDataProvider#getMinimalDaysInFirstWeek(Locale)}.
+     */
+    @EnabledForJreRange(min = JRE.JAVA_21,
+            disabledReason = "JRE > 21 test")
+    @Test
+    void testGetMinimalDaysInFirstWeekLatestCldr() {
+        assertEquals(
+                Calendar.getInstance(Basque.LOCALE_ES).getMinimalDaysInFirstWeek(),
+                provider.getMinimalDaysInFirstWeek(Basque.LOCALE_ES));
+        assertEquals(
+                Calendar.getInstance(Basque.LOCALE_FR).getMinimalDaysInFirstWeek(),
+                provider.getMinimalDaysInFirstWeek(Basque.LOCALE_FR));
+        assertEquals(
+                Calendar.getInstance(Basque.LOCALE).getMinimalDaysInFirstWeek(),
+                provider.getMinimalDaysInFirstWeek(Basque.LOCALE));
     }
 }
