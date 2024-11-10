@@ -23,6 +23,7 @@ package dev.orne.i18n.spi.eu;
  */
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Constants for basque language.
@@ -41,6 +42,10 @@ public final class Basque {
     public static final Locale LOCALE_ES = new Locale(LANGUAGE, "ES");
     /** The northern basque country locale. */
     public static final Locale LOCALE_FR = new Locale(LANGUAGE, "FR");
+    /** The southern basque time zone. */
+    public static final TimeZone TIME_ZONE_ES = TimeZone.getTimeZone("Europe/Madrid");
+    /** The northern basque time zone. */
+    public static final TimeZone TIME_ZONE_FR = TimeZone.getTimeZone("Europe/Paris");
 
     /**
      * Private constructor.
