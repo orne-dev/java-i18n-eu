@@ -38,11 +38,11 @@ import javax.validation.constraints.NotNull;
 public class BasqueDateFormatSymbolsProvider
 extends DateFormatSymbolsProvider {
 
-    /** The basque date format symbols template. */
+    /** The basque date format symbols template for {@code eu} */
     private static DateFormatSymbols symbols;
-    /** The basque (ES) date format symbols template. */
+    /** The basque (ES) date format symbols template for {@code eu_ES}. */
     private static DateFormatSymbols symbolsEs;
-    /** The basque (FR) date format symbols template. */
+    /** The basque (FR) date format symbols template for {@code eu_FR}. */
     private static DateFormatSymbols symbolsFr;
 
     /**
@@ -69,8 +69,14 @@ extends DateFormatSymbolsProvider {
         return BasqueLocaleServiceProvider.LOCALES;
     }
 
-    static synchronized DateFormatSymbols getSymbols(
-            final Locale locale) {
+    /**
+     * Returns the date format symbols for the specified locale.
+     * 
+     * @param locale The desired locale.
+     * @return The date format symbols.
+     */
+    static synchronized @NotNull DateFormatSymbols getSymbols(
+            final @NotNull Locale locale) {
         if (Basque.LOCALE_ES.equals(locale)) {
             if (symbolsEs == null) {
                 symbolsEs = new DateFormatSymbols(Basque.LOCALE_ES);
