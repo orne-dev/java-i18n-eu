@@ -55,11 +55,6 @@ extends AbstractBasqueProviderTest<BasqueNumberFormatProvider> {
                 new BasqueDecimalFormatSymbolsProvider()::getInstance));
     }
 
-    /** The provider instance to test. */
-    private final BasqueDecimalFormatSymbolsProvider symbols = new BasqueDecimalFormatSymbolsProvider();
-    /** The provider instance to test. */
-    private final BasqueNumberFormatProvider provider = new BasqueNumberFormatProvider(symbols::getInstance);
-
     /**
      * Test for {@link BasqueNumberFormatProvider#BasqueNumberFormatProvider()}.
      */

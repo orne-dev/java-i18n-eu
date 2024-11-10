@@ -53,7 +53,8 @@ extends AbstractBasqueProviderTest<BasqueDateFormatProvider> {
      * Creates a new instance.
      */
     BasqueDateFormatProviderTest() {
-        super(new BasqueDateFormatProvider());
+        super(new BasqueDateFormatProvider(
+                new BasqueDateFormatSymbolsProvider()::getInstance));
     }
 
     /**

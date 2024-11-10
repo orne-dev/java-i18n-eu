@@ -23,9 +23,11 @@ package dev.orne.i18n.spi.eu;
  */
 
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.text.spi.DateFormatProvider;
 import java.util.Locale;
+import java.util.function.Function;
 
 import javax.validation.constraints.NotNull;
 
@@ -39,20 +41,52 @@ import javax.validation.constraints.NotNull;
 public class BasqueDateFormatProvider
 extends DateFormatProvider {
 
-    /** Time formats.  */
+    /** Time formats. */
     static final String[] TIME_FORMATS = new String[] {
             "HH:mm:ss (zzzz)",
             "HH:mm:ss (z)",
             "HH:mm:ss",
             "HH:mm"
     };
-    /** Date formats.  */
+    /** Date formats. */
     static final String[] DATE_FORMATS = new String[] {
             "y('e')'ko' MMMM'ren' d('a'), EEEE",
             "y('e')'ko' MMMM'ren' d('a')",
             "y('e')'ko' MMM d('a')",
             "yy/M/d"
     };
+    /** Date-time format. */
+    static final String DATE_TIME_FORMAT = "%s %s";
+
+    /** The date format symbols provider. */
+    private final @NotNull Function<Locale, DateFormatSymbols> symbolsProvider;
+
+    /**
+     * Creates a new instance.
+     */
+    public BasqueDateFormatProvider() {
+        this(DateFormatSymbols::getInstance);
+    }
+
+    /**
+     * Creates a new instance with the specified date format symbols provider.
+     * 
+     * @param symbolsProvider The date format symbols provider.
+     */
+    protected BasqueDateFormatProvider(
+            final @NotNull Function<Locale, DateFormatSymbols> symbolsProvider) {
+        super();
+        this.symbolsProvider = symbolsProvider;
+    }
+
+    /**
+     * Returns the date format symbols provider.
+     * 
+     * @return The date format symbols provider.
+     */
+    protected @NotNull Function<Locale, DateFormatSymbols> getSymbolsProvider() {
+        return this.symbolsProvider;
+    }
 
     /**
      * {@inheritDoc}
@@ -61,7 +95,9 @@ extends DateFormatProvider {
     public DateFormat getDateInstance(
             final int style,
             final @NotNull Locale locale) {
-        return new SimpleDateFormat(getDateFormat(style), locale);
+        return new SimpleDateFormat(
+                getDateFormat(style),
+                this.symbolsProvider.apply(locale));
     }
 
     /**
@@ -71,7 +107,9 @@ extends DateFormatProvider {
     public DateFormat getTimeInstance(
             final int style,
             final @NotNull Locale locale) {
-        return new SimpleDateFormat(getTimeFormat(style), locale);
+        return new SimpleDateFormat(
+                getTimeFormat(style),
+                this.symbolsProvider.apply(locale));
     }
 
     /**
@@ -83,8 +121,11 @@ extends DateFormatProvider {
             final int timeStyle,
             final @NotNull Locale locale) {
         return new SimpleDateFormat(
-                getDateFormat(dateStyle) + " " + getTimeFormat(timeStyle),
-                locale);
+                String.format(
+                        DATE_TIME_FORMAT,
+                        getDateFormat(dateStyle),
+                        getTimeFormat(timeStyle)),
+                this.symbolsProvider.apply(locale));
     }
 
     /**

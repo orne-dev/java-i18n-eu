@@ -61,7 +61,8 @@ extends NumberFormatProvider {
     }
 
     /**
-     * Creates a new instance with the specified.
+     * Creates a new instance with the specified decimal format symbols
+     * provider.
      * 
      * @param symbolsProvider The decimal format symbols provider.
      */

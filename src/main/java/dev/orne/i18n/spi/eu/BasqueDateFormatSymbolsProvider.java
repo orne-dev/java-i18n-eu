@@ -39,56 +39,27 @@ public class BasqueDateFormatSymbolsProvider
 extends DateFormatSymbolsProvider {
 
     /** The basque date format symbols template. */
-    private final DateFormatSymbols symbols;
+    private static DateFormatSymbols symbols;
     /** The basque (ES) date format symbols template. */
-    private final DateFormatSymbols symbolsEs;
+    private static DateFormatSymbols symbolsEs;
     /** The basque (FR) date format symbols template. */
-    private final DateFormatSymbols symbolsFr;
+    private static DateFormatSymbols symbolsFr;
 
     /**
      * Creates a new instance.
      */
     public BasqueDateFormatSymbolsProvider() {
-        this.symbols = new DateFormatSymbols(Basque.LOCALE);
-        this.symbols.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);
-        this.symbols.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);
-        this.symbols.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);
-        this.symbols.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);
-        this.symbols.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);
-        this.symbols.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);
-        this.symbols.setZoneStrings(BasqueTimeZoneNameProvider.getNames());
-        this.symbolsEs = new DateFormatSymbols(Basque.LOCALE_ES);
-        this.symbolsEs.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);
-        this.symbolsEs.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);
-        this.symbolsEs.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);
-        this.symbolsEs.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);
-        this.symbolsEs.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);
-        this.symbolsEs.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);
-        this.symbolsEs.setZoneStrings(BasqueTimeZoneNameProvider.getNames());
-        this.symbolsFr = new DateFormatSymbols(Basque.LOCALE_FR);
-        this.symbolsFr.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);
-        this.symbolsFr.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);
-        this.symbolsFr.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);
-        this.symbolsFr.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);
-        this.symbolsFr.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);
-        this.symbolsFr.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);
-        this.symbolsFr.setZoneStrings(BasqueTimeZoneNameProvider.getNames());
+        super();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-	public DateFormatSymbols getInstance(
-	        final Locale locale) {
-        if (Basque.LOCALE_ES.equals(locale)) {
-            return (DateFormatSymbols) symbolsEs.clone();
-        } else if (Basque.LOCALE_ES.equals(locale)) {
-            return (DateFormatSymbols) symbolsFr.clone();
-        } else {
-            return (DateFormatSymbols) symbols.clone();
-        }
-	}
+    public DateFormatSymbols getInstance(
+            final Locale locale) {
+        return getSymbols(locale);
+    }
 
     /**
      * {@inheritDoc}
@@ -96,5 +67,46 @@ extends DateFormatSymbolsProvider {
     @Override
     public @NotNull Locale[] getAvailableLocales() {
         return BasqueLocaleServiceProvider.LOCALES;
+    }
+
+    static synchronized DateFormatSymbols getSymbols(
+            final Locale locale) {
+        if (Basque.LOCALE_ES.equals(locale)) {
+            if (symbolsEs == null) {
+                symbolsEs = new DateFormatSymbols(Basque.LOCALE_ES);
+                symbolsEs.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);
+                symbolsEs.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);
+                symbolsEs.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);
+                symbolsEs.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);
+                symbolsEs.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);
+                symbolsEs.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);
+                symbolsEs.setZoneStrings(BasqueTimeZoneNameProvider.getNames());
+            }
+            return (DateFormatSymbols) symbolsEs.clone();
+        } else if (Basque.LOCALE_FR.equals(locale)) {
+            if (symbolsFr == null) {
+                symbolsFr = new DateFormatSymbols(Basque.LOCALE_FR);
+                symbolsFr.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);
+                symbolsFr.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);
+                symbolsFr.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);
+                symbolsFr.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);
+                symbolsFr.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);
+                symbolsFr.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);
+                symbolsFr.setZoneStrings(BasqueTimeZoneNameProvider.getNames());
+            }
+            return (DateFormatSymbols) symbolsFr.clone();
+        } else {
+            if (symbols == null) {
+                symbols = new DateFormatSymbols(Basque.LOCALE);
+                symbols.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);
+                symbols.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);
+                symbols.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);
+                symbols.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);
+                symbols.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);
+                symbols.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);
+                symbols.setZoneStrings(BasqueTimeZoneNameProvider.getNames());
+            }
+            return (DateFormatSymbols) symbols.clone();
+        }
     }
 }
