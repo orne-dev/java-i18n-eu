@@ -39,6 +39,13 @@ public class BasqueCalendarDataProvider
 extends CalendarDataProvider {
 
     /**
+     * Creates a new instance.
+     */
+    public BasqueCalendarDataProvider() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

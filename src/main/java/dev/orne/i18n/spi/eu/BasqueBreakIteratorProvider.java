@@ -39,6 +39,13 @@ public class BasqueBreakIteratorProvider
 extends BreakIteratorProvider {
 
     /**
+     * Creates a new instance.
+     */
+    public BasqueBreakIteratorProvider() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

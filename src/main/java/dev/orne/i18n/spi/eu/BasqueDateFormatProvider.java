@@ -57,6 +57,13 @@ extends DateFormatProvider {
     static final String DATE_TIME_FORMAT = "%s (%s)";
 
     /**
+     * Creates a new instance.
+     */
+    public BasqueDateFormatProvider() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

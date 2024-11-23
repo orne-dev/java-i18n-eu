@@ -58,6 +58,13 @@ extends LocaleNameProvider {
     private static Properties data;
 
     /**
+     * Creates a new instance.
+     */
+    public BasqueLocaleNameProvider() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

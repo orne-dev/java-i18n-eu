@@ -41,6 +41,13 @@ extends LocaleServiceProvider {
     static final Locale[] LOCALES = new Locale[] { Basque.LOCALE, Basque.LOCALE_ES, Basque.LOCALE_FR };
 
     /**
+     * Creates a new instance.
+     */
+    public BasqueLocaleServiceProvider() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

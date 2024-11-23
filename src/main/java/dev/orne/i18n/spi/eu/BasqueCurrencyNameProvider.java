@@ -51,6 +51,13 @@ extends CurrencyNameProvider {
     private Properties currencies;
 
     /**
+     * Creates a new instance.
+     */
+    public BasqueCurrencyNameProvider() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

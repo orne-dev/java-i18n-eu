@@ -214,6 +214,13 @@ extends CalendarNameProvider {
     };
 
     /**
+     * Creates a new instance.
+     */
+    public BasqueCalendarNameProvider() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

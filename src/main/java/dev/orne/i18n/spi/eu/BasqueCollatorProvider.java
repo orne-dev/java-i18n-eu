@@ -39,6 +39,13 @@ public class BasqueCollatorProvider
 extends CollatorProvider {
 
     /**
+     * Creates a new instance.
+     */
+    public BasqueCollatorProvider() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
