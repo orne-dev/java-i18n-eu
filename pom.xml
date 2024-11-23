@@ -43,6 +43,9 @@
 
     <javax.validation.version>2.0.1.Final</javax.validation.version>
 
+    <junit.jupiter.version>5.11.3</junit.jupiter.version>
+    <junit.pioneer.version>2.3.0</junit.pioneer.version>
+
     <github.project.id>java-i18n-eu</github.project.id>
     <sonar.projectKey>orne-dev_java-i18n-eu</sonar.projectKey>
   </properties>

@@ -84,7 +84,7 @@ extends CalendarNameProvider {
     };
     /** Long Japanese calendar era names. */
     static final String[] JAPANESE_ERAS_LONG = new String[] {
-            "Kristo ondoren",
+            "CE",
             "Meiji",
             "Taish\u014D",
             "Sh\u014Dwa",

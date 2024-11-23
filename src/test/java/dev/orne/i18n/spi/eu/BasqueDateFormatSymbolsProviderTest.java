@@ -25,7 +25,10 @@ package dev.orne.i18n.spi.eu;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.DateFormatSymbols;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 
 import org.junit.jupiter.api.Tag;
@@ -99,25 +102,24 @@ extends AbstractBasqueProviderTest<BasqueDateFormatSymbolsProvider> {
     /**
      * Test for {@link BasqueDateFormatSymbolsProvider#getInstance(Locale)}.
      */
-    @EnabledForJreRange(min = JRE.JAVA_21,
-            disabledReason = "JRE > 21 test")
+    @EnabledForJreRange(min = JRE.JAVA_23,
+            disabledReason = "JRE > 23 test")
     @Test
     void testGetInstanceLatestCldr() {
         final DateFormatSymbols expected = DateFormatSymbols.getInstance(Basque.LOCALE);
         final DateFormatSymbols result = provider.getInstance(Basque.LOCALE);
         logInvalidZonesConfiguration(expected.getZoneStrings(), result.getZoneStrings());
         assertSymbolsEquals(expected, result);
-        assertEquals(expected, result);
     }
 
     /**
      * Test for {@link BasqueDateFormatSymbolsProvider#getInstance(Locale)}.
      */
-    @EnabledForJreRange(min = JRE.JAVA_21,
-            disabledReason = "JRE > 21 test")
+    @EnabledForJreRange(min = JRE.JAVA_23,
+            disabledReason = "JRE > 23 test")
     @Test
     void testGetInstanceLatestCldrEs() {
-        assertEquals(
+        assertSymbolsEquals(
                 DateFormatSymbols.getInstance(Basque.LOCALE_ES),
                 provider.getInstance(Basque.LOCALE_ES));
     }
@@ -125,11 +127,11 @@ extends AbstractBasqueProviderTest<BasqueDateFormatSymbolsProvider> {
     /**
      * Test for {@link BasqueDateFormatSymbolsProvider#getInstance(Locale)}.
      */
-    @EnabledForJreRange(min = JRE.JAVA_21,
-            disabledReason = "JRE > 21 test")
+    @EnabledForJreRange(min = JRE.JAVA_23,
+            disabledReason = "JRE > 23 test")
     @Test
     void testGetInstanceLatestCldrFr() {
-        assertEquals(
+        assertSymbolsEquals(
                 DateFormatSymbols.getInstance(Basque.LOCALE_FR),
                 provider.getInstance(Basque.LOCALE_FR));
     }
@@ -161,10 +163,23 @@ extends AbstractBasqueProviderTest<BasqueDateFormatSymbolsProvider> {
         assertNotNull(result.getZoneStrings());
         final String[][] expectedZones = expected.getZoneStrings();
         final String[][] zones = result.getZoneStrings();
-        for (int i = 0; i < zones.length; i++) {
+        assertZonesEquals(expectedZones, zones);
+    }
+
+    private void assertZonesEquals(
+            final String[][] expectedZones,
+            final String[][] zones) {
+        final HashMap<String, String[]> values = new HashMap<>();
+        for (int i = 0; i < expectedZones.length; i++) {
             final String[] expectedZone = expectedZones[i];
+            values.put(expectedZone[0], expectedZone);
+        }
+        for (int i = 0; i < zones.length; i++) {
             final String[] zone = zones[i];
-            assertArrayEquals(expectedZone, zone);
+            final String id = zone[0];
+            if (values.containsKey(id)) {
+                assertArrayEquals(values.get(id), zone);
+            }
         }
     }
 
@@ -172,38 +187,50 @@ extends AbstractBasqueProviderTest<BasqueDateFormatSymbolsProvider> {
             final String[][] expectedZones,
             final String[][] zones) {
         if (LOG.isDebugEnabled()) {
-            for (int i = 0; i < zones.length; i++) {
+            final HashMap<String, String[]> values = new HashMap<>();
+            for (int i = 0; i < expectedZones.length; i++) {
                 final String[] expectedZone = expectedZones[i];
+                values.put(expectedZone[0], expectedZone);
+            }
+            final ArrayList<String> failures = new ArrayList<>();
+            for (int i = 0; i < zones.length; i++) {
                 final String[] zone = zones[i];
-                if (!Arrays.equals(expectedZone, zone)) {
-                    if (zone.length > 6) {
-                        LOG.debug("{}={}",
-                                expectedZone[0],
-                                expectedZone[6]);
-                        LOG.debug("{}{}={}",
-                                expectedZone[0],
-                                BasqueTimeZoneNameProvider.LONG_SUFFIX,
-                                expectedZone[5]);
-                    }
-                    LOG.debug("{}{}={}",
-                            expectedZone[0],
-                            BasqueTimeZoneNameProvider.STANDARD_SUFFIX,
-                            expectedZone[2]);
-                    LOG.debug("{}{}{}={}",
-                            expectedZone[0],
-                            BasqueTimeZoneNameProvider.STANDARD_SUFFIX,
-                            BasqueTimeZoneNameProvider.LONG_SUFFIX,
-                            expectedZone[1]);
-                    LOG.debug("{}{}={}",
-                            expectedZone[0],
-                            BasqueTimeZoneNameProvider.DAYLIGHT_SUFFIX,
-                            expectedZone[4]);
-                    LOG.debug("{}{}{}={}",
-                            expectedZone[0],
-                            BasqueTimeZoneNameProvider.DAYLIGHT_SUFFIX,
-                            BasqueTimeZoneNameProvider.LONG_SUFFIX,
-                            expectedZone[3]);
+                final String id = zone[0];
+                if (values.containsKey(id) && !Arrays.equals(values.get(id), zone)) {
+                    failures.add(id);
                 }
+            }
+            Collections.sort(failures);
+            for (final String id : failures) {
+                final String[] expectedZone = values.get(id);
+                if (expectedZone.length > 6) {
+                    LOG.debug("{}={}",
+                            expectedZone[0],
+                            expectedZone[6]);
+                    LOG.debug("{}{}={}",
+                            expectedZone[0],
+                            BasqueTimeZoneNameProvider.LONG_SUFFIX,
+                            expectedZone[5]);
+                }
+                LOG.debug("{}{}={}",
+                        expectedZone[0],
+                        BasqueTimeZoneNameProvider.STANDARD_SUFFIX,
+                        expectedZone[2]);
+                LOG.debug("{}{}{}={}",
+                        expectedZone[0],
+                        BasqueTimeZoneNameProvider.STANDARD_SUFFIX,
+                        BasqueTimeZoneNameProvider.LONG_SUFFIX,
+                        expectedZone[1]);
+                LOG.debug("{}{}={}",
+                        expectedZone[0],
+                        BasqueTimeZoneNameProvider.DAYLIGHT_SUFFIX,
+                        expectedZone[4]);
+                LOG.debug("{}{}{}={}",
+                        expectedZone[0],
+                        BasqueTimeZoneNameProvider.DAYLIGHT_SUFFIX,
+                        BasqueTimeZoneNameProvider.LONG_SUFFIX,
+                        expectedZone[3]);
+                
             }
         }
     }

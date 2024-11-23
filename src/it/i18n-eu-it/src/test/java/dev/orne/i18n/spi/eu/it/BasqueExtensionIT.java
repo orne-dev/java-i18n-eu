@@ -134,16 +134,16 @@ class BasqueExtensionIT {
                 "16:50",
                 DateFormat.getTimeInstance(DateFormat.SHORT, LOCALE_ES).format(date));
         assertEquals(
-                "2024(e)ko azaroaren 10(a), igandea 16:50:36 (Europako erdialdeko ordu estandarra)",
+                "2024(e)ko azaroaren 10(a), igandea (16:50:36 (Europako erdialdeko ordu estandarra))",
                 DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, LOCALE_ES).format(date));
         assertEquals(
-                "2024(e)ko azaroaren 10(a) 16:50:36 (CET)",
+                "2024(e)ko azaroaren 10(a) (16:50:36 (CET))",
                 DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, LOCALE_ES).format(date));
         assertEquals(
-                "2024(e)ko aza. 10(a) 16:50:36",
+                "2024(e)ko aza. 10(a) (16:50:36)",
                 DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, LOCALE_ES).format(date));
         assertEquals(
-                "24/11/10 16:50",
+                "24/11/10 (16:50)",
                 DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, LOCALE_ES).format(date));
     }
 

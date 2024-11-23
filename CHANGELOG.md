@@ -14,4 +14,4 @@
     01. Added class `dev.orne.i18n.spi.eu.BasqueLocaleServiceProvider`.
     01. Added class `dev.orne.i18n.spi.eu.BasqueNumberFormatProvider`.
     01. Added class `dev.orne.i18n.spi.eu.BasqueTimeZoneNameProvider`.
-01. :gift: Mimics behavior of Adoptium JRE 21 basque language support.
+01. :gift: Mimics behavior of Temurin JRE 23 basque language support.

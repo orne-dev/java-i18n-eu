@@ -53,8 +53,7 @@ extends AbstractBasqueProviderTest<BasqueDateFormatProvider> {
      * Creates a new instance.
      */
     BasqueDateFormatProviderTest() {
-        super(new BasqueDateFormatProvider(
-                new BasqueDateFormatSymbolsProvider()::getInstance));
+        super(new BasqueDateFormatProvider());
     }
 
     /**
@@ -137,8 +136,8 @@ extends AbstractBasqueProviderTest<BasqueDateFormatProvider> {
     /**
      * Test for {@link BasqueDateFormatProvider#getDateTimeInstance(int, int, Locale)}.
      */
-    @EnabledForJreRange(min = JRE.JAVA_21,
-            disabledReason = "JRE > 21 test")
+    @EnabledForJreRange(min = JRE.JAVA_23,
+            disabledReason = "JRE > 23 test")
     @ParameterizedTest
     @MethodSource("dateTimeStyles")
     void testGetDateTimeInstanceLatestCldr(

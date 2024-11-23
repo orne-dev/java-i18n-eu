@@ -175,8 +175,8 @@ extends AbstractBasqueProviderTest<BasqueCalendarNameProvider> {
     /**
      * Test for {@link BasqueCalendarNameProvider#getDisplayName(String, int, int, int, Locale)}.
      */
-    @EnabledForJreRange(min = JRE.JAVA_21,
-            disabledReason = "JRE >= 21 test")
+    @EnabledForJreRange(min = JRE.JAVA_23,
+            disabledReason = "JRE >= 23 test")
     @ParameterizedTest
     @MethodSource("typeFieldStyle")
     void testGetDisplayNameLatestCldr(

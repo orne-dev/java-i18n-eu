@@ -23,11 +23,9 @@ package dev.orne.i18n.spi.eu;
  */
 
 import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.text.spi.DateFormatProvider;
 import java.util.Locale;
-import java.util.function.Function;
 
 import javax.validation.constraints.NotNull;
 
@@ -56,37 +54,7 @@ extends DateFormatProvider {
             "yy/M/d"
     };
     /** Date-time format. */
-    static final String DATE_TIME_FORMAT = "%s %s";
-
-    /** The date format symbols provider. */
-    private final @NotNull Function<Locale, DateFormatSymbols> symbolsProvider;
-
-    /**
-     * Creates a new instance.
-     */
-    public BasqueDateFormatProvider() {
-        this(DateFormatSymbols::getInstance);
-    }
-
-    /**
-     * Creates a new instance with the specified date format symbols provider.
-     * 
-     * @param symbolsProvider The date format symbols provider.
-     */
-    protected BasqueDateFormatProvider(
-            final @NotNull Function<Locale, DateFormatSymbols> symbolsProvider) {
-        super();
-        this.symbolsProvider = symbolsProvider;
-    }
-
-    /**
-     * Returns the date format symbols provider.
-     * 
-     * @return The date format symbols provider.
-     */
-    protected @NotNull Function<Locale, DateFormatSymbols> getSymbolsProvider() {
-        return this.symbolsProvider;
-    }
+    static final String DATE_TIME_FORMAT = "%s (%s)";
 
     /**
      * {@inheritDoc}
@@ -97,7 +65,7 @@ extends DateFormatProvider {
             final @NotNull Locale locale) {
         return new SimpleDateFormat(
                 getDateFormat(style),
-                this.symbolsProvider.apply(locale));
+                locale);
     }
 
     /**
@@ -109,7 +77,7 @@ extends DateFormatProvider {
             final @NotNull Locale locale) {
         return new SimpleDateFormat(
                 getTimeFormat(style),
-                this.symbolsProvider.apply(locale));
+                locale);
     }
 
     /**
@@ -125,7 +93,7 @@ extends DateFormatProvider {
                         DATE_TIME_FORMAT,
                         getDateFormat(dateStyle),
                         getTimeFormat(timeStyle)),
-                this.symbolsProvider.apply(locale));
+                locale);
     }
 
     /**
