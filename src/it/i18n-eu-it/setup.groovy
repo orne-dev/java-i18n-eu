@@ -28,7 +28,7 @@ def extensions = basedir.toPath().resolve("target/java-extensions")
 if (Files.notExists(extensions)) {
     Files.createDirectories(extensions)
 }
-def jar = basedir.toPath().resolve("../../basque-locale-extension-1.0.0-SNAPSHOT.jar")
+def jar = Path.of(jarPath)
 def extJar = extensions.resolve(jar.getFileName())
 if (Files.exists(extJar)) {
     Files.delete(extJar)

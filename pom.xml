@@ -126,6 +126,9 @@
             <artifactId>maven-invoker-plugin</artifactId>
             <configuration>
               <settingsFile>src/it/settings.xml</settingsFile>
+              <scriptVariables>
+                <jarPath>${project.build.directory}/${project.build.finalName}.jar</jarPath>
+              </scriptVariables>
               <preBuildHookScript>setup</preBuildHookScript>
             </configuration>
           </plugin>
