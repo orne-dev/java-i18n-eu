@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -51,6 +52,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 @Tag("ut")
 class BasqueTimeZoneNameProviderTest
 extends AbstractBasqueProviderTest<BasqueTimeZoneNameProvider> {
+
+    /** Unknown time zone ID. */
+    private static final String BAD_ZONE = "Bad/Zone";
 
     /**
      * Creates a new instance.
@@ -75,9 +79,28 @@ extends AbstractBasqueProviderTest<BasqueTimeZoneNameProvider> {
         assertNotNull(provider.getDisplayName(zoneId, true, TimeZone.SHORT, Basque.LOCALE));
         assertNotNull(provider.getDisplayName(zoneId, true, TimeZone.SHORT, Basque.LOCALE_ES));
         assertNotNull(provider.getDisplayName(zoneId, true, TimeZone.SHORT, Basque.LOCALE_FR));
-        assertNotNull(provider.getDisplayName(zoneId, false, TimeZone.LONG, Basque.LOCALE));
-        assertNotNull(provider.getDisplayName(zoneId, false, TimeZone.LONG, Basque.LOCALE_ES));
-        assertNotNull(provider.getDisplayName(zoneId, false, TimeZone.LONG, Basque.LOCALE_FR));
+        assertNotNull(provider.getDisplayName(zoneId, true, TimeZone.LONG, Basque.LOCALE));
+        assertNotNull(provider.getDisplayName(zoneId, true, TimeZone.LONG, Basque.LOCALE_ES));
+        assertNotNull(provider.getDisplayName(zoneId, true, TimeZone.LONG, Basque.LOCALE_FR));
+    }
+
+    /**
+     * Test for {@link BasqueTimeZoneNameProvider#getDisplayName(String, boolean, int, Locale)}.
+     */
+    @Test
+    void testGetDisplayNameUnknownZone() {
+        assertNull(provider.getDisplayName(BAD_ZONE, false, TimeZone.SHORT, Basque.LOCALE));
+        assertNull(provider.getDisplayName(BAD_ZONE, false, TimeZone.SHORT, Basque.LOCALE_ES));
+        assertNull(provider.getDisplayName(BAD_ZONE, false, TimeZone.SHORT, Basque.LOCALE_FR));
+        assertNull(provider.getDisplayName(BAD_ZONE, false, TimeZone.LONG, Basque.LOCALE));
+        assertNull(provider.getDisplayName(BAD_ZONE, false, TimeZone.LONG, Basque.LOCALE_ES));
+        assertNull(provider.getDisplayName(BAD_ZONE, false, TimeZone.LONG, Basque.LOCALE_FR));
+        assertNull(provider.getDisplayName(BAD_ZONE, true, TimeZone.SHORT, Basque.LOCALE));
+        assertNull(provider.getDisplayName(BAD_ZONE, true, TimeZone.SHORT, Basque.LOCALE_ES));
+        assertNull(provider.getDisplayName(BAD_ZONE, true, TimeZone.SHORT, Basque.LOCALE_FR));
+        assertNull(provider.getDisplayName(BAD_ZONE, true, TimeZone.LONG, Basque.LOCALE));
+        assertNull(provider.getDisplayName(BAD_ZONE, true, TimeZone.LONG, Basque.LOCALE_ES));
+        assertNull(provider.getDisplayName(BAD_ZONE, true, TimeZone.LONG, Basque.LOCALE_FR));
     }
 
     /**
@@ -93,6 +116,19 @@ extends AbstractBasqueProviderTest<BasqueTimeZoneNameProvider> {
         assertNotNull(provider.getGenericDisplayName(zoneId, TimeZone.LONG, Basque.LOCALE));
         assertNotNull(provider.getGenericDisplayName(zoneId, TimeZone.LONG, Basque.LOCALE_ES));
         assertNotNull(provider.getGenericDisplayName(zoneId, TimeZone.LONG, Basque.LOCALE_FR));
+    }
+
+    /**
+     * Test for {@link BasqueTimeZoneNameProvider#getGenericDisplayName(String, int, Locale)}.
+     */
+    @Test
+    void testGetGenericDisplayNameUnknownZone() {
+        assertNull(provider.getGenericDisplayName(BAD_ZONE, TimeZone.SHORT, Basque.LOCALE));
+        assertNull(provider.getGenericDisplayName(BAD_ZONE, TimeZone.SHORT, Basque.LOCALE_ES));
+        assertNull(provider.getGenericDisplayName(BAD_ZONE, TimeZone.SHORT, Basque.LOCALE_FR));
+        assertNull(provider.getGenericDisplayName(BAD_ZONE, TimeZone.LONG, Basque.LOCALE));
+        assertNull(provider.getGenericDisplayName(BAD_ZONE, TimeZone.LONG, Basque.LOCALE_ES));
+        assertNull(provider.getGenericDisplayName(BAD_ZONE, TimeZone.LONG, Basque.LOCALE_FR));
     }
 
     /**

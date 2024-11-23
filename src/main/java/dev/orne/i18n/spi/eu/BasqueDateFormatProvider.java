@@ -119,7 +119,7 @@ extends DateFormatProvider {
      */
     public static @NotNull String getDateFormat(
             int style) {
-        if (style >= DATE_FORMATS.length) {
+        if (style < 0 || style >= DATE_FORMATS.length) {
             style = DateFormat.SHORT;
         }
         return DATE_FORMATS[style];
@@ -133,7 +133,7 @@ extends DateFormatProvider {
      */
     public static @NotNull String getTimeFormat(
             int style) {
-        if (style >= TIME_FORMATS.length) {
+        if (style < 0 || style >= TIME_FORMATS.length) {
             style = DateFormat.SHORT;
         }
         return TIME_FORMATS[style];

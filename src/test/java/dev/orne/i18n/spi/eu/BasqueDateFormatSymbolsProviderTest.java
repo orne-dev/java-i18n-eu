@@ -102,6 +102,86 @@ extends AbstractBasqueProviderTest<BasqueDateFormatSymbolsProvider> {
     /**
      * Test for {@link BasqueDateFormatSymbolsProvider#getInstance(Locale)}.
      */
+    @Test
+    void testGetInstanceEs() {
+        final DateFormatSymbols result = provider.getInstance(Basque.LOCALE_ES);
+        assertNotNull(result.getAmPmStrings());
+        assertEquals(2, result.getAmPmStrings().length);
+        assertNotNull(result.getWeekdays());
+        assertEquals(8, result.getWeekdays().length);
+        assertNotNull(result.getShortWeekdays());
+        assertEquals(8, result.getShortWeekdays().length);
+        assertNotNull(result.getMonths());
+        assertEquals(13, result.getMonths().length);
+        assertNotNull(result.getShortMonths());
+        assertEquals(13, result.getShortMonths().length);
+        assertNotNull(result.getAmPmStrings());
+        assertEquals(2, result.getAmPmStrings().length);
+        assertNotNull(result.getEras());
+        assertEquals(2, result.getEras().length);
+        assertNotNull(result.getLocalPatternChars());
+        assertEquals(
+                DateFormatSymbols.getInstance(Locale.ENGLISH).getLocalPatternChars(),
+                result.getLocalPatternChars());
+        assertNotNull(result.getZoneStrings());
+        final String[][] zones = result.getZoneStrings();
+        for (int i = 0; i < zones.length; i++) {
+            final String[] zone = zones[i];
+            assertNotNull(zone[0]);
+            assertNotNull(zone[1]);
+            assertNotNull(zone[2]);
+            assertNotNull(zone[3]);
+            assertNotNull(zone[4]);
+            if (zone.length > 5) {
+                assertNotNull(zone[5]);
+                assertNotNull(zone[6]);
+            }
+        }
+    }
+
+    /**
+     * Test for {@link BasqueDateFormatSymbolsProvider#getInstance(Locale)}.
+     */
+    @Test
+    void testGetInstanceFr() {
+        final DateFormatSymbols result = provider.getInstance(Basque.LOCALE_FR);
+        assertNotNull(result.getAmPmStrings());
+        assertEquals(2, result.getAmPmStrings().length);
+        assertNotNull(result.getWeekdays());
+        assertEquals(8, result.getWeekdays().length);
+        assertNotNull(result.getShortWeekdays());
+        assertEquals(8, result.getShortWeekdays().length);
+        assertNotNull(result.getMonths());
+        assertEquals(13, result.getMonths().length);
+        assertNotNull(result.getShortMonths());
+        assertEquals(13, result.getShortMonths().length);
+        assertNotNull(result.getAmPmStrings());
+        assertEquals(2, result.getAmPmStrings().length);
+        assertNotNull(result.getEras());
+        assertEquals(2, result.getEras().length);
+        assertNotNull(result.getLocalPatternChars());
+        assertEquals(
+                DateFormatSymbols.getInstance(Locale.ENGLISH).getLocalPatternChars(),
+                result.getLocalPatternChars());
+        assertNotNull(result.getZoneStrings());
+        final String[][] zones = result.getZoneStrings();
+        for (int i = 0; i < zones.length; i++) {
+            final String[] zone = zones[i];
+            assertNotNull(zone[0]);
+            assertNotNull(zone[1]);
+            assertNotNull(zone[2]);
+            assertNotNull(zone[3]);
+            assertNotNull(zone[4]);
+            if (zone.length > 5) {
+                assertNotNull(zone[5]);
+                assertNotNull(zone[6]);
+            }
+        }
+    }
+
+    /**
+     * Test for {@link BasqueDateFormatSymbolsProvider#getInstance(Locale)}.
+     */
     @EnabledForJreRange(min = JRE.JAVA_23,
             disabledReason = "JRE > 23 test")
     @Test

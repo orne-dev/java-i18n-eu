@@ -58,6 +58,7 @@ extends AbstractBasqueProviderTest<BasqueCalendarDataProvider> {
     void testGetFirstDayOfWeek() {
         assertEquals(Calendar.MONDAY, provider.getFirstDayOfWeek(Basque.LOCALE_ES));
         assertEquals(Calendar.MONDAY, provider.getFirstDayOfWeek(Basque.LOCALE_FR));
+        assertEquals(Calendar.SUNDAY, provider.getFirstDayOfWeek(Basque.LOCALE));
     }
 
     /**

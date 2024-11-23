@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -69,6 +70,31 @@ extends AbstractBasqueProviderTest<BasqueDateFormatProvider> {
     }
 
     /**
+     * Test for {@link BasqueDateFormatProvider#getDateInstance(int, Locale)}.
+     */
+    @Test
+    void testGetDateInstanceBadStyle() {
+        assertEquals(
+                provider.getDateInstance(DateFormat.SHORT, Basque.LOCALE),
+                provider.getDateInstance(-1, Basque.LOCALE));
+        assertEquals(
+                provider.getDateInstance(DateFormat.SHORT, Basque.LOCALE),
+                provider.getDateInstance(4, Basque.LOCALE));
+        assertEquals(
+                provider.getDateInstance(DateFormat.SHORT, Basque.LOCALE_ES),
+                provider.getDateInstance(-1, Basque.LOCALE_ES));
+        assertEquals(
+                provider.getDateInstance(DateFormat.SHORT, Basque.LOCALE_ES),
+                provider.getDateInstance(4, Basque.LOCALE_ES));
+        assertEquals(
+                provider.getDateInstance(DateFormat.SHORT, Basque.LOCALE_FR),
+                provider.getDateInstance(-1, Basque.LOCALE_FR));
+        assertEquals(
+                provider.getDateInstance(DateFormat.SHORT, Basque.LOCALE_FR),
+                provider.getDateInstance(4, Basque.LOCALE_FR));
+    }
+
+    /**
      * Test for {@link BasqueDateFormatProvider#getTimeInstance(int, Locale)}.
      */
     @ParameterizedTest
@@ -78,6 +104,31 @@ extends AbstractBasqueProviderTest<BasqueDateFormatProvider> {
         assertNotNull(provider.getTimeInstance(style, Basque.LOCALE));
         assertNotNull(provider.getTimeInstance(style, Basque.LOCALE_ES));
         assertNotNull(provider.getTimeInstance(style, Basque.LOCALE_FR));
+    }
+
+    /**
+     * Test for {@link BasqueDateFormatProvider#getTimeInstance(int, Locale)}.
+     */
+    @Test
+    void testGetTimeInstanceBadStyle() {
+        assertEquals(
+                provider.getTimeInstance(DateFormat.SHORT, Basque.LOCALE),
+                provider.getTimeInstance(-1, Basque.LOCALE));
+        assertEquals(
+                provider.getTimeInstance(DateFormat.SHORT, Basque.LOCALE),
+                provider.getTimeInstance(4, Basque.LOCALE));
+        assertEquals(
+                provider.getTimeInstance(DateFormat.SHORT, Basque.LOCALE_ES),
+                provider.getTimeInstance(-1, Basque.LOCALE_ES));
+        assertEquals(
+                provider.getTimeInstance(DateFormat.SHORT, Basque.LOCALE_ES),
+                provider.getTimeInstance(4, Basque.LOCALE_ES));
+        assertEquals(
+                provider.getTimeInstance(DateFormat.SHORT, Basque.LOCALE_FR),
+                provider.getTimeInstance(-1, Basque.LOCALE_FR));
+        assertEquals(
+                provider.getTimeInstance(DateFormat.SHORT, Basque.LOCALE_FR),
+                provider.getTimeInstance(4, Basque.LOCALE_FR));
     }
 
     /**
@@ -91,6 +142,49 @@ extends AbstractBasqueProviderTest<BasqueDateFormatProvider> {
         assertNotNull(provider.getDateTimeInstance(dateStyle, timeStyle, Basque.LOCALE));
         assertNotNull(provider.getDateTimeInstance(dateStyle, timeStyle, Basque.LOCALE_ES));
         assertNotNull(provider.getDateTimeInstance(dateStyle, timeStyle, Basque.LOCALE_FR));
+    }
+
+    /**
+     * Test for {@link BasqueDateFormatProvider#getDateTimeInstance(int, int, Locale)}.
+     */
+    @Test
+    void testGetDateTimeInstanceBadStyle() {
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE),
+                provider.getDateTimeInstance(-1, DateFormat.SHORT, Basque.LOCALE));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE),
+                provider.getDateTimeInstance(4, DateFormat.SHORT, Basque.LOCALE));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE),
+                provider.getDateTimeInstance(DateFormat.SHORT, -1, Basque.LOCALE));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE),
+                provider.getDateTimeInstance(DateFormat.SHORT, 4, Basque.LOCALE));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE_ES),
+                provider.getDateTimeInstance(-1, DateFormat.SHORT, Basque.LOCALE_ES));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE_ES),
+                provider.getDateTimeInstance(4, DateFormat.SHORT, Basque.LOCALE_ES));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE_ES),
+                provider.getDateTimeInstance(DateFormat.SHORT, -1, Basque.LOCALE_ES));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE_ES),
+                provider.getDateTimeInstance(DateFormat.SHORT, 4, Basque.LOCALE_ES));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE_FR),
+                provider.getDateTimeInstance(-1, DateFormat.SHORT, Basque.LOCALE_FR));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE_FR),
+                provider.getDateTimeInstance(4, DateFormat.SHORT, Basque.LOCALE_FR));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE_FR),
+                provider.getDateTimeInstance(DateFormat.SHORT, -1, Basque.LOCALE_FR));
+        assertEquals(
+                provider.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Basque.LOCALE_FR),
+                provider.getDateTimeInstance(DateFormat.SHORT, 4, Basque.LOCALE_FR));
     }
 
     /**
