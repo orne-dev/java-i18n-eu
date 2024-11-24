@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueCollatorProvider,0,8,0,0,0,4,0,3,0,3
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueDateFormatProvider,0,101,0,8,0,19,0,12,0,8
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueTimeZoneNameProvider,16,273,3,23,4,48,3,17,0,7
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueBreakIteratorProvider,0,17,0,0,0,7,0,6,0,6
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueLocaleNameProvider,6,70,0,2,2,14,0,9,0,8
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueDateFormatSymbolsProvider,0,112,3,7,0,36,3,6,0,4
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueDecimalFormatSymbolsProvider,0,130,0,10,0,39,0,9,0,4
+basque-locale-extension,dev.orne.i18n.spi.eu,Basque,0,24,0,0,0,5,0,1,0,1
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueLocaleServiceProvider,0,21,0,0,0,4,0,3,0,3
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueCalendarNameProvider,27,692,13,49,12,84,12,39,2,14
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueCalendarDataProvider,0,29,0,8,0,11,0,8,0,4
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueNumberFormatProvider,0,60,0,0,0,17,0,8,0,8
+basque-locale-extension,dev.orne.i18n.spi.eu,BasqueCurrencyNameProvider,6,47,0,2,2,12,0,7,0,6

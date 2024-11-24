@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BasqueNumberFormatProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">basque-locale-extension</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.spi.eu</a> &gt; <span class="el_source">BasqueNumberFormatProvider.java</span></div><h1>BasqueNumberFormatProvider.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.spi.eu;
+
+/*-
+ * #%L
+ * basque-locale-extension
+ * %%
+ * Copyright (C) 2024 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.spi.NumberFormatProvider;
+import java.util.Locale;
+import java.util.function.Function;
+
+import javax.validation.constraints.NotNull;
+
+/**
+ * Basque number format provider.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2024-10
+ * @since 1.0
+ */
+public class BasqueNumberFormatProvider
+extends NumberFormatProvider {
+
+    /** The integer format. */
+    public static final String INTEGER_FORMAT = &quot;#,##0;-#,##0&quot;;
+    /** The number format. */
+    public static final String NUMBER_FORMAT = &quot;#,##0.###;-#,##0.###&quot;;
+    /** The percent format. */
+    public static final String PERCENT_FORMAT = &quot;%\u00A0#,##0;-%\u00A0#,##0&quot;;
+    /** The currency format. */
+    public static final String CURRENCY_FORMAT = &quot;#,##0.00\u00A0¤;-#,##0.00\u00A0¤&quot;;
+
+    /** The decimal format symbols provider. */
+    private final @NotNull Function&lt;Locale, DecimalFormatSymbols&gt; symbolsProvider;
+
+    /**
+     * Creates a new instance.
+     */
+    public BasqueNumberFormatProvider() {
+<span class="fc" id="L60">        this(DecimalFormatSymbols::getInstance);</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * Creates a new instance with the specified decimal format symbols
+     * provider.
+     * 
+     * @param symbolsProvider The decimal format symbols provider.
+     */
+    protected BasqueNumberFormatProvider(
+            final @NotNull Function&lt;Locale, DecimalFormatSymbols&gt; symbolsProvider) {
+<span class="fc" id="L71">        super();</span>
+<span class="fc" id="L72">        this.symbolsProvider = symbolsProvider;</span>
+<span class="fc" id="L73">    }</span>
+
+    /**
+     * Returns the decimal format symbols provider.
+     * 
+     * @return The decimal format symbols provider.
+     */
+    protected @NotNull Function&lt;Locale, DecimalFormatSymbols&gt; getSymbolsProvider() {
+<span class="fc" id="L81">        return this.symbolsProvider;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NumberFormat getIntegerInstance(
+            final @NotNull Locale locale) {
+<span class="fc" id="L90">        final DecimalFormat result = new DecimalFormat(</span>
+                INTEGER_FORMAT,
+<span class="fc" id="L92">                this.symbolsProvider.apply(locale));</span>
+<span class="fc" id="L93">        result.setParseIntegerOnly(true);</span>
+<span class="fc" id="L94">        return result;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NumberFormat getNumberInstance(
+            final @NotNull Locale locale) {
+<span class="fc" id="L103">        return new DecimalFormat(</span>
+                NUMBER_FORMAT,
+<span class="fc" id="L105">                this.symbolsProvider.apply(locale));</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NumberFormat getPercentInstance(
+            final @NotNull Locale locale) {
+<span class="fc" id="L114">        return new DecimalFormat(</span>
+                PERCENT_FORMAT,
+<span class="fc" id="L116">                this.symbolsProvider.apply(locale));</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NumberFormat getCurrencyInstance(
+            final @NotNull Locale locale) {
+<span class="fc" id="L125">        return new DecimalFormat(</span>
+                CURRENCY_FORMAT,
+<span class="fc" id="L127">                this.symbolsProvider.apply(locale));</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Locale[] getAvailableLocales() {
+<span class="fc" id="L135">        return BasqueLocaleServiceProvider.LOCALES;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

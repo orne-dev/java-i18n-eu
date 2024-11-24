@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BasqueDateFormatSymbolsProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">basque-locale-extension</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.spi.eu</a> &gt; <span class="el_source">BasqueDateFormatSymbolsProvider.java</span></div><h1>BasqueDateFormatSymbolsProvider.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.spi.eu;
+
+/*-
+ * #%L
+ * basque-locale-extension
+ * %%
+ * Copyright (C) 2024 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.text.DateFormatSymbols;
+import java.text.spi.DateFormatSymbolsProvider;
+import java.util.Locale;
+
+import javax.validation.constraints.NotNull;
+
+/**
+ * Basque date format symbols provider.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2024-10
+ * @since 1.0
+ */
+public class BasqueDateFormatSymbolsProvider
+extends DateFormatSymbolsProvider {
+
+    /** The basque date format symbols template for {@code eu} */
+    private static DateFormatSymbols symbols;
+    /** The basque (ES) date format symbols template for {@code eu_ES}. */
+    private static DateFormatSymbols symbolsEs;
+    /** The basque (FR) date format symbols template for {@code eu_FR}. */
+    private static DateFormatSymbols symbolsFr;
+
+    /**
+     * Creates a new instance.
+     */
+    public BasqueDateFormatSymbolsProvider() {
+<span class="fc" id="L52">        super();</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DateFormatSymbols getInstance(
+            final Locale locale) {
+<span class="fc" id="L61">        return getSymbols(locale);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Locale[] getAvailableLocales() {
+<span class="fc" id="L69">        return BasqueLocaleServiceProvider.LOCALES;</span>
+    }
+
+    /**
+     * Returns the date format symbols for the specified locale.
+     * 
+     * @param locale The desired locale.
+     * @return The date format symbols.
+     */
+    static synchronized @NotNull DateFormatSymbols getSymbols(
+            final @NotNull Locale locale) {
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (Basque.LOCALE_ES.equals(locale)) {</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            if (symbolsEs == null) {</span>
+<span class="fc" id="L82">                symbolsEs = new DateFormatSymbols(Basque.LOCALE_ES);</span>
+<span class="fc" id="L83">                symbolsEs.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);</span>
+<span class="fc" id="L84">                symbolsEs.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);</span>
+<span class="fc" id="L85">                symbolsEs.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);</span>
+<span class="fc" id="L86">                symbolsEs.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);</span>
+<span class="fc" id="L87">                symbolsEs.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);</span>
+<span class="fc" id="L88">                symbolsEs.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);</span>
+<span class="fc" id="L89">                symbolsEs.setZoneStrings(BasqueTimeZoneNameProvider.getNames());</span>
+            }
+<span class="fc" id="L91">            return (DateFormatSymbols) symbolsEs.clone();</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        } else if (Basque.LOCALE_FR.equals(locale)) {</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if (symbolsFr == null) {</span>
+<span class="fc" id="L94">                symbolsFr = new DateFormatSymbols(Basque.LOCALE_FR);</span>
+<span class="fc" id="L95">                symbolsFr.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);</span>
+<span class="fc" id="L96">                symbolsFr.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);</span>
+<span class="fc" id="L97">                symbolsFr.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);</span>
+<span class="fc" id="L98">                symbolsFr.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);</span>
+<span class="fc" id="L99">                symbolsFr.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);</span>
+<span class="fc" id="L100">                symbolsFr.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);</span>
+<span class="fc" id="L101">                symbolsFr.setZoneStrings(BasqueTimeZoneNameProvider.getNames());</span>
+            }
+<span class="fc" id="L103">            return (DateFormatSymbols) symbolsFr.clone();</span>
+        } else {
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">            if (symbols == null) {</span>
+<span class="fc" id="L106">                symbols = new DateFormatSymbols(Basque.LOCALE);</span>
+<span class="fc" id="L107">                symbols.setMonths(BasqueCalendarNameProvider.MONTHS_LONG);</span>
+<span class="fc" id="L108">                symbols.setShortMonths(BasqueCalendarNameProvider.MONTHS_SHORT);</span>
+<span class="fc" id="L109">                symbols.setWeekdays(BasqueCalendarNameProvider.WEEKDAYS_LONG);</span>
+<span class="fc" id="L110">                symbols.setShortWeekdays(BasqueCalendarNameProvider.WEEKDAYS_SHORT);</span>
+<span class="fc" id="L111">                symbols.setAmPmStrings(BasqueCalendarNameProvider.AMPM_MARKERS);</span>
+<span class="fc" id="L112">                symbols.setEras(BasqueCalendarNameProvider.GREGORIAN_ERAS_SHORT);</span>
+<span class="fc" id="L113">                symbols.setZoneStrings(BasqueTimeZoneNameProvider.getNames());</span>
+            }
+<span class="fc" id="L115">            return (DateFormatSymbols) symbols.clone();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

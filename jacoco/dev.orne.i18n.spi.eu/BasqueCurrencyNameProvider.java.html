@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BasqueCurrencyNameProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">basque-locale-extension</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.spi.eu</a> &gt; <span class="el_source">BasqueCurrencyNameProvider.java</span></div><h1>BasqueCurrencyNameProvider.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.spi.eu;
+
+/*-
+ * #%L
+ * basque-locale-extension
+ * %%
+ * Copyright (C) 2024 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.spi.CurrencyNameProvider;
+
+import javax.validation.constraints.NotNull;
+
+/**
+ * Basque currency names provider.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2024-10
+ * @since 1.0
+ */
+public class BasqueCurrencyNameProvider
+extends CurrencyNameProvider {
+
+    /** The logger of the class. */
+<span class="fc" id="L46">    private static final Logger LOG = Logger.getLogger(BasqueCurrencyNameProvider.class.getName());</span>
+
+    /** Suffix for currency symbol properties. */
+    static final String SYMBOL_SUFFIX = &quot;.symbol&quot;;
+    /** The currency names. */
+    private Properties currencies;
+
+    /**
+     * Creates a new instance.
+     */
+    public BasqueCurrencyNameProvider() {
+<span class="fc" id="L57">        super();</span>
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSymbol(
+            final @NotNull String currencyCode,
+            final @NotNull Locale locale) {
+<span class="fc" id="L67">        return getCurrencies().getProperty(currencyCode + SYMBOL_SUFFIX);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDisplayName(
+            final @NotNull String currencyCode,
+            final @NotNull Locale locale) {
+<span class="fc" id="L77">        return getCurrencies().getProperty(currencyCode);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Locale[] getAvailableLocales() {
+<span class="fc" id="L85">        return BasqueLocaleServiceProvider.LOCALES;</span>
+    }
+
+    /**
+     * Returns the currency names for ISO 4217 currency codes.
+     * 
+     * @return The currency names.
+     */
+    synchronized @NotNull Properties getCurrencies() {
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (currencies == null) {</span>
+<span class="fc" id="L95">            currencies = new Properties();</span>
+<span class="fc" id="L96">            try (InputStream is = BasqueLocaleNameProvider.class.getResourceAsStream(&quot;currencies.properties&quot;)) {</span>
+<span class="fc" id="L97">                currencies.load(is);</span>
+<span class="nc" id="L98">            } catch (final IOException e) {</span>
+<span class="nc" id="L99">                LOG.log(Level.SEVERE, &quot;Error loading basque currency names&quot;, e);</span>
+<span class="fc" id="L100">            }</span>
+        }
+<span class="fc" id="L102">        return currencies;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Basque.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">basque-locale-extension</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.spi.eu</a> &gt; <span class="el_source">Basque.java</span></div><h1>Basque.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.spi.eu;
+
+/*-
+ * #%L
+ * basque-locale-extension
+ * %%
+ * Copyright (C) 2024 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.util.Locale;
+import java.util.TimeZone;
+
+/**
+ * Constants for basque language.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2024-10
+ * @since 1.0
+ */
+public final class Basque {
+
+    /** The basque language ISO 639 code. */
+    public static final String LANGUAGE = &quot;eu&quot;;
+    /** The basque language locale. */
+<span class="fc" id="L40">    public static final Locale LOCALE = new Locale(LANGUAGE);</span>
+    /** The southern basque country locale. */
+<span class="fc" id="L42">    public static final Locale LOCALE_ES = new Locale(LANGUAGE, &quot;ES&quot;);</span>
+    /** The northern basque country locale. */
+<span class="fc" id="L44">    public static final Locale LOCALE_FR = new Locale(LANGUAGE, &quot;FR&quot;);</span>
+    /** The southern basque time zone. */
+<span class="fc" id="L46">    public static final TimeZone TIME_ZONE_ES = TimeZone.getTimeZone(&quot;Europe/Madrid&quot;);</span>
+    /** The northern basque time zone. */
+<span class="fc" id="L48">    public static final TimeZone TIME_ZONE_FR = TimeZone.getTimeZone(&quot;Europe/Paris&quot;);</span>
+
+    /**
+     * Private constructor.
+     */
+    private Basque() {
+        // Utility class
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
