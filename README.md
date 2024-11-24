@@ -3,7 +3,7 @@
 Provides basque language support for Java [Locale-Sensitive Services SPI][java i18n spi].
 
 Note that Java supports basque language since JRE 11.
-This extension provides same resources as JRE 21 for applications that cannot
+This extension provides same resources as JRE 23 for applications that cannot
 upgrade from Java 8.
 
 For an up-to-date internalization support consider using [ICU4J][icu4j],
@@ -53,7 +53,7 @@ The binaries can be obtained from [Maven Central][status.maven] with the
 ```
 
 Java requires the language extensions to be included in the JRE's
-`lib/etx/` directory.
+`lib/ext/` directory.
 
 ## Further information
 
@@ -76,5 +76,4 @@ For further information refer to the [Maven Site][site] and [Javadoc][javadoc].
 [status.dev.cov]: https://sonarcloud.io/dashboard?id=orne-dev_java-i18n-eu&branch=develop
 [status.dev.cov.badge]: https://sonarcloud.io/api/project_badges/measure?project=orne-dev_java-i18n-eu&metric=coverage&branch=develop
 [java i18n spi]: https://docs.oracle.com/javase/tutorial/i18n/locale/services.html
-[kirolak eu]: https://code.google.com/archive/p/java-basque-locale/
 [icu4j]: https://unicode-org.github.io/icu/userguide/icu4j/

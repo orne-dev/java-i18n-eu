@@ -1,6 +1,18 @@
-basque-locale-extension
+#set( $dash = "#" )
+$dash Introduction
 
-## Usage
+Basque language support for Java [Locale-Sensitive Services SPI][java i18n spi].
+
+Note that Java supports basque language since JRE 11.
+This extension provides same behavior as JRE 23 for applications that cannot
+upgrade from Java 8.
+
+A full, up-to-date, internalization with basque language support can be
+obtained using [ICU4J][icu4j].
+This option can be somewhat overkill for small projects that only require
+basque language support.
+
+$dash$dash Maven coordinates
 
 ```xml
 <project ...>
@@ -18,6 +30,35 @@ basque-locale-extension
 </project>
 ```
 
-## Features
+$dash$dash Usage
 
-- TODO
+Nota that JRE uses [Java Extension Mechanism][java ext] to load
+Locale-Sensitive Services.
+
+This means that including the library as project dependency
+is not enough to new languages support work.
+
+The library must be included in the JRE installation's `lib/ext/` directory,
+the shared `/usr/java/packages/lib/ext` directory (in Linux)
+or a custom directory configured through Java `java.ext.dirs` system property.
+
+$dash$dash Features
+
+The library implements all the Java Locale-Sensitive services:
+
+- LocaleServiceProvider
+- LocaleNameProvider
+- CalendarNameProvider
+- CalendarDataProvider
+- CurrencyNameProvider
+- TimeZoneNameProvider
+- BreakIteratorProvider
+- CollatorProvider
+- DateFormatProvider
+- DateFormatSymbolsProvider
+- DecimalFormatSymbolsProvider
+- NumberFormatProvider
+
+[java i18n spi]: https://docs.oracle.com/javase/tutorial/i18n/locale/services.html
+[java ext]: https://docs.oracle.com/javase/8/docs/technotes/guides/extensions/spec.html
+[icu4j]: https://unicode-org.github.io/icu/userguide/icu4j/
