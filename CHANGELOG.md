@@ -1,6 +1,6 @@
 # Locale-Sensitive Services SPI Basque (Euskera) language extension - Changelog
 
-## 1.0.1
+## 1.0.1 - 2025-06-14
 
 ### Fixed
 
