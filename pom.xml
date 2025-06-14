@@ -6,12 +6,12 @@
   <parent>
     <groupId>dev.orne</groupId>
     <artifactId>java-root-pom</artifactId>
-    <version>0.7.0</version>
+    <version>0.8.2</version>
     <relativePath />
   </parent>
 
   <artifactId>basque-locale-extension</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <packaging>jar</packaging>
 
   <name>basque-locale-extension</name>
